@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"teal-finance/emo"
+
+	"github.com/teal-finance/emo"
 )
 
 func hook(evt emo.Event) {
