@@ -1,4 +1,4 @@
-module teal-finance/emo
+module github.com/teal-finance/emo
 
 go 1.18
 
