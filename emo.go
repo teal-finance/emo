@@ -7,7 +7,7 @@ func (zone Zone) Info(args ...interface{}) Event {
 
 // Warning :.
 func (zone Zone) Warning(args ...interface{}) Event {
-	return processEvent("🔔", zone, true, args)
+	return processEvent("🔔", zone, false, args)
 }
 
 // Error :.
