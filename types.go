@@ -14,6 +14,7 @@ import (
 type Zone struct {
 	Name  string
 	Print bool
+	Hook  func(Event)
 }
 
 // Event : base emo event.
@@ -29,9 +30,26 @@ type Event struct {
 
 // NewZone : create a zone constructor.
 func NewZone(name string, print ...bool) Zone {
+	p := true
+	if len(print) > 0 {
+		p = print[0]
+	}
 	return Zone{
 		Name:  name,
-		Print: (len(print) > 0) && (print[0] == true),
+		Print: p,
+	}
+}
+
+// NewZoneWithHook : create a zone constructor with a hook
+func NewZoneWithHook(name string, hook func(Event), print ...bool) Zone {
+	p := true
+	if len(print) > 0 {
+		p = print[0]
+	}
+	return Zone{
+		Name:  name,
+		Print: p,
+		Hook:  hook,
 	}
 }
 
@@ -48,6 +66,10 @@ func processEvent(emoji string, zone Zone, isError bool, args []interface{}) Eve
 
 	if isError || zone.Print {
 		fmt.Println(event.message())
+	}
+
+	if zone.Hook != nil {
+		zone.Hook(event)
 	}
 
 	return event
@@ -76,18 +98,6 @@ func concatenateErrors(args []interface{}) error {
 	for _, a := range args {
 		str := fmt.Sprintf("%v", a)
 		texts = append(texts, str)
-
-		/*err, isErr := e.(error)
-		if !isErr {
-			msg, isString := e.(string)
-			if !isString {
-				t := reflect.TypeOf(e).String()
-				return ev, errors.New("The parameters must be string or an error. It is of type " + t)
-			}
-			texts = append(texts, msg)
-		} else {
-			texts = append(texts, err.Error())
-		}*/
 	}
 
 	all := strings.Join(texts, " ")
@@ -96,7 +106,10 @@ func concatenateErrors(args []interface{}) error {
 }
 
 func (event Event) message() string {
-	msg := "[" + color.Yellow(event.Zone.Name) + "] "
+	msg := ""
+	if event.Zone.Name != "" {
+		msg += "[" + color.Yellow(event.Zone.Name) + "] "
+	}
 
 	if event.IsError {
 		msg += color.Red("Error") + " "
