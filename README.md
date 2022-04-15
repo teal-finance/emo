@@ -1,2 +1,3 @@
-# emo
-Emoji based semantic scoped debuging
+# Emo
+
+Emoji based semantic scoped debuging for Go
