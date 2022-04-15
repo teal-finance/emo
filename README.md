@@ -29,7 +29,9 @@ Output:
 Create an event of error type:
 
 ```go
-err := new error.Error("Some error")
+import errors
+
+err := errors.New("PARAM ERROR")
 emo.Error("This is an error message", err)
 ```
 
