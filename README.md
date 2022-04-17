@@ -111,10 +111,21 @@ go test -tags=emo
 
 ### Generate the code
 
-Run the codegen tools to build up the functions:
+Run the codegen tools to build up the functions from the `codegen/ref.json` file. 
+Build the Go library:
 
 ```bash
-go run ref/codegen.go
+go run codegen/main.go -go
 ```
 
 This will regenerate the `emo_gen.go` file
+
+Build the Typescript library:
+
+```bash
+go run codegen/main.go -ts
+```
+
+This will regenerate the `lang/typescript/src/emo_gen.ts` file
+
+To build all languages at once use no flag
