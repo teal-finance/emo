@@ -4,6 +4,8 @@ help:
 	# codegen          Generate code for all language
 	# gocodegen        Generate code for the Go library
 	# tscodegen        Generate code for the Typescript library
+	# pycodegen        Generate code for the Python library
+	#
 	# docgen           Generate the documentation
 	#
 	# test             Run the tests on the Go library
@@ -20,6 +22,10 @@ gocodegen:
 .PHONY: tscodegen
 tscodegen:
 	go run codegen/main.go -ts
+
+.PHONY: pycodegen
+pycodegen:
+	go run codegen/main.go -py
 
 .PHONY: docgen
 docgen:
