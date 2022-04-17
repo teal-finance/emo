@@ -47,3 +47,11 @@ To build all languages at once:
 ```bash
 make codegen
 ```
+
+### Generate the doc
+
+Regenerate the complete events list 
+
+```bash
+make docgen
+```
