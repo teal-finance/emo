@@ -49,13 +49,125 @@ func (zone Zone) TimeError(args ...interface{}) Event {
 }
 
 func (zone Zone) Param(args ...interface{}) Event {
-	return processEvent("📥", zone, false, args)
+	return processEvent("📩", zone, false, args)
 }
 
 func (zone Zone) ParamError(args ...interface{}) Event {
-	return processEvent("📥", zone, true, args)
+	return processEvent("📩", zone, true, args)
 }
 
 func (zone Zone) Debug(args ...interface{}) Event {
 	return processEvent("💊", zone, false, args)
+}
+
+func (zone Zone) State(args ...interface{}) Event {
+	return processEvent("📢", zone, false, args)
+}
+
+func (zone Zone) Save(args ...interface{}) Event {
+	return processEvent("💾", zone, false, args)
+}
+
+func (zone Zone) Delete(args ...interface{}) Event {
+	return processEvent("❌", zone, false, args)
+}
+
+func (zone Zone) Data(args ...interface{}) Event {
+	return processEvent("💼", zone, false, args)
+}
+
+func (zone Zone) Line(args ...interface{}) Event {
+	return processEvent("➖", zone, false, args)
+}
+
+func (zone Zone) Init(args ...interface{}) Event {
+	return processEvent("🎬", zone, false, args)
+}
+
+func (zone Zone) Update(args ...interface{}) Event {
+	return processEvent("🆙", zone, false, args)
+}
+
+func (zone Zone) Ok(args ...interface{}) Event {
+	return processEvent("🆗", zone, false, args)
+}
+
+func (zone Zone) Build(args ...interface{}) Event {
+	return processEvent("🔧", zone, false, args)
+}
+
+func (zone Zone) Aconstructor(args ...interface{}) Event {
+	return processEvent("🛠️", zone, false, args)
+}
+
+func (zone Zone) NotFound(args ...interface{}) Event {
+	return processEvent("🚫", zone, false, args)
+}
+
+func (zone Zone) Found(args ...interface{}) Event {
+	return processEvent("👁️‍🗨️", zone, false, args)
+}
+
+func (zone Zone) Result(args ...interface{}) Event {
+	return processEvent("📌", zone, false, args)
+}
+
+func (zone Zone) Input(args ...interface{}) Event {
+	return processEvent("📥", zone, false, args)
+}
+
+func (zone Zone) Output(args ...interface{}) Event {
+	return processEvent("📤", zone, false, args)
+}
+
+func (zone Zone) Function(args ...interface{}) Event {
+	return processEvent("🔨", zone, false, args)
+}
+
+func (zone Zone) Key(args ...interface{}) Event {
+	return processEvent("🔑", zone, false, args)
+}
+
+func (zone Zone) AccessToken(args ...interface{}) Event {
+	return processEvent("🔑", zone, false, args)
+}
+
+func (zone Zone) RefreshToken(args ...interface{}) Event {
+	return processEvent("🗝️", zone, false, args)
+}
+
+func (zone Zone) Transmit(args ...interface{}) Event {
+	return processEvent("📡", zone, false, args)
+}
+
+func (zone Zone) Start(args ...interface{}) Event {
+	return processEvent("🏁", zone, false, args)
+}
+
+func (zone Zone) Stop(args ...interface{}) Event {
+	return processEvent("🛑", zone, false, args)
+}
+
+func (zone Zone) ArrowIn(args ...interface{}) Event {
+	return processEvent("=>", zone, false, args)
+}
+
+func (zone Zone) ArrowOut(args ...interface{}) Event {
+	return processEvent("<=", zone, false, args)
+}
+
+func (zone Zone) SmallArrowIn(args ...interface{}) Event {
+	return processEvent("->", zone, false, args)
+}
+
+func (zone Zone) SmallArrowOut(args ...interface{}) Event {
+	return processEvent("<-", zone, false, args)
+}
+
+func (zone Zone) RequestGet(args ...interface{}) Event {
+	return processEvent("🔷", zone, false, args)
+}
+
+func (zone Zone) RequestPost(args ...interface{}) Event {
+	return processEvent("🔶", zone, false, args)
 }

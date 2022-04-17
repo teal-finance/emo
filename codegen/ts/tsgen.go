@@ -4,12 +4,16 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"unicode"
 
 	"github.com/teal-finance/emo/codegen/core"
 )
 
 func genFunc(name string, emoji string, isError bool) string {
-	return "\t" + name + `(...obj: any[]): string { return this.emo("` + emoji + `", obj); }
+	a := []rune(name)
+	a[0] = unicode.ToLower(a[0])
+	s := string(a)
+	return "\t" + s + `(...obj: any[]): string { return this.emo("` + emoji + `", obj); }
 `
 }
 

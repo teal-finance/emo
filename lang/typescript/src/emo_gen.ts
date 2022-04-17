@@ -43,33 +43,89 @@ export default class Emo {
     this.hook = hook;
   }
 
-	Info(...obj: any[]): string { return this.emo("ℹ️", obj); }
+	info(...obj: any[]): string { return this.emo("ℹ️", obj); }
 
-	Warning(...obj: any[]): string { return this.emo("🔔", obj); }
+	warning(...obj: any[]): string { return this.emo("🔔", obj); }
 
-	Error(...obj: any[]): string { return this.emo("💢", obj); }
+	error(...obj: any[]): string { return this.emo("💢", obj); }
 
-	Query(...obj: any[]): string { return this.emo("🗄️", obj); }
+	query(...obj: any[]): string { return this.emo("🗄️", obj); }
 
-	QueryError(...obj: any[]): string { return this.emo("🗄️", obj); }
+	queryError(...obj: any[]): string { return this.emo("🗄️", obj); }
 
-	Encrypt(...obj: any[]): string { return this.emo("🎼", obj); }
+	encrypt(...obj: any[]): string { return this.emo("🎼", obj); }
 
-	EncryptError(...obj: any[]): string { return this.emo("🎼", obj); }
+	encryptError(...obj: any[]): string { return this.emo("🎼", obj); }
 
-	Decrypt(...obj: any[]): string { return this.emo("🗝️", obj); }
+	decrypt(...obj: any[]): string { return this.emo("🗝️", obj); }
 
-	DecryptError(...obj: any[]): string { return this.emo("🗝️", obj); }
+	decryptError(...obj: any[]): string { return this.emo("🗝️", obj); }
 
-	Time(...obj: any[]): string { return this.emo("⏱️", obj); }
+	time(...obj: any[]): string { return this.emo("⏱️", obj); }
 
-	TimeError(...obj: any[]): string { return this.emo("⏱️", obj); }
+	timeError(...obj: any[]): string { return this.emo("⏱️", obj); }
 
-	Param(...obj: any[]): string { return this.emo("📥", obj); }
+	param(...obj: any[]): string { return this.emo("📩", obj); }
 
-	ParamError(...obj: any[]): string { return this.emo("📥", obj); }
+	paramError(...obj: any[]): string { return this.emo("📩", obj); }
 
-	Debug(...obj: any[]): string { return this.emo("💊", obj); }
+	debug(...obj: any[]): string { return this.emo("💊", obj); }
+
+	state(...obj: any[]): string { return this.emo("📢", obj); }
+
+	save(...obj: any[]): string { return this.emo("💾", obj); }
+
+	delete(...obj: any[]): string { return this.emo("❌", obj); }
+
+	data(...obj: any[]): string { return this.emo("💼", obj); }
+
+	line(...obj: any[]): string { return this.emo("➖", obj); }
+
+	init(...obj: any[]): string { return this.emo("🎬", obj); }
+
+	update(...obj: any[]): string { return this.emo("🆙", obj); }
+
+	ok(...obj: any[]): string { return this.emo("🆗", obj); }
+
+	build(...obj: any[]): string { return this.emo("🔧", obj); }
+
+	aconstructor(...obj: any[]): string { return this.emo("🛠️", obj); }
+
+	notFound(...obj: any[]): string { return this.emo("🚫", obj); }
+
+	found(...obj: any[]): string { return this.emo("👁️‍🗨️", obj); }
+
+	result(...obj: any[]): string { return this.emo("📌", obj); }
+
+	input(...obj: any[]): string { return this.emo("📥", obj); }
+
+	output(...obj: any[]): string { return this.emo("📤", obj); }
+
+	function(...obj: any[]): string { return this.emo("🔨", obj); }
+
+	key(...obj: any[]): string { return this.emo("🔑", obj); }
+
+	accessToken(...obj: any[]): string { return this.emo("🔑", obj); }
+
+	refreshToken(...obj: any[]): string { return this.emo("🗝️", obj); }
+
+	transmit(...obj: any[]): string { return this.emo("📡", obj); }
+
+	start(...obj: any[]): string { return this.emo("🏁", obj); }
+
+	stop(...obj: any[]): string { return this.emo("🛑", obj); }
+
+	arrowIn(...obj: any[]): string { return this.emo("=>", obj); }
+
+	arrowOut(...obj: any[]): string { return this.emo("<=", obj); }
+
+	smallArrowIn(...obj: any[]): string { return this.emo("->", obj); }
+
+	smallArrowOut(...obj: any[]): string { return this.emo("<-", obj); }
+
+	requestGet(...obj: any[]): string { return this.emo("🔷", obj); }
+
+	requestPost(...obj: any[]): string { return this.emo("🔶", obj); }
 
 	/// A simple message with no emoji
 	msg(...obj: any[]): string { return this.emo("", obj); }

@@ -56,17 +56,157 @@
   },
   {
     "name": "Param",
-    "emoji": "📥",
+    "emoji": "📩",
     "isError": false
   },
   {
     "name": "ParamError",
-    "emoji": "📥",
+    "emoji": "📩",
     "isError": true
   },
   {
     "name": "Debug",
     "emoji": "💊",
+    "isError": false
+  },
+  {
+    "name": "State",
+    "emoji": "📢",
+    "isError": false
+  },
+  {
+    "name": "Save",
+    "emoji": "💾",
+    "isError": false
+  },
+  {
+    "name": "Delete",
+    "emoji": "❌",
+    "isError": false
+  },
+  {
+    "name": "Data",
+    "emoji": "💼",
+    "isError": false
+  },
+  {
+    "name": "Line",
+    "emoji": "➖",
+    "isError": false
+  },
+  {
+    "name": "Init",
+    "emoji": "🎬",
+    "isError": false
+  },
+  {
+    "name": "Update",
+    "emoji": "🆙",
+    "isError": false
+  },
+  {
+    "name": "Ok",
+    "emoji": "🆗",
+    "isError": false
+  },
+  {
+    "name": "Build",
+    "emoji": "🔧",
+    "isError": false
+  },
+  {
+    "name": "Aconstructor",
+    "emoji": "🛠️",
+    "isError": false
+  },
+  {
+    "name": "NotFound",
+    "emoji": "🚫",
+    "isError": false
+  },
+  {
+    "name": "Found",
+    "emoji": "👁️‍🗨️",
+    "isError": false
+  },
+  {
+    "name": "Result",
+    "emoji": "📌",
+    "isError": false
+  },
+  {
+    "name": "Input",
+    "emoji": "📥",
+    "isError": false
+  },
+  {
+    "name": "Output",
+    "emoji": "📤",
+    "isError": false
+  },
+  {
+    "name": "Function",
+    "emoji": "🔨",
+    "isError": false
+  },
+  {
+    "name": "Key",
+    "emoji": "🔑",
+    "isError": false
+  },
+  {
+    "name": "AccessToken",
+    "emoji": "🔑",
+    "isError": false
+  },
+  {
+    "name": "RefreshToken",
+    "emoji": "🗝️",
+    "isError": false
+  },
+  {
+    "name": "Transmit",
+    "emoji": "📡",
+    "isError": false
+  },
+  {
+    "name": "Start",
+    "emoji": "🏁",
+    "isError": false
+  },
+  {
+    "name": "Stop",
+    "emoji": "🛑",
+    "isError": false
+  },
+  {
+    "name": "ArrowIn",
+    "emoji": "=>",
+    "isError": false
+  },
+  {
+    "name": "ArrowOut",
+    "emoji": "<=",
+    "isError": false
+  },
+  {
+    "name": "SmallArrowIn",
+    "emoji": "->",
+    "isError": false
+  },
+  {
+    "name": "SmallArrowOut",
+    "emoji": "<-",
+    "isError": false
+  },
+  {
+    "name": "RequestGet",
+    "emoji": "🔷",
+    "isError": false
+  },
+  {
+    "name": "RequestPost",
+    "emoji": "🔶",
     "isError": false
   }
 ]

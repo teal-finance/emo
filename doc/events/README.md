@@ -14,6 +14,34 @@
 |   DecryptError     |   🗝️   |     ✔️    |
 |   Time     |   ⏱️   |         |
 |   TimeError     |   ⏱️   |     ✔️    |
-|   Param     |   📥   |         |
-|   ParamError     |   📥   |     ✔️    |
+|   Param     |   📩   |         |
+|   ParamError     |   📩   |     ✔️    |
 |   Debug     |   💊   |         |
+|   State     |   📢   |         |
+|   Save     |   💾   |         |
+|   Delete     |   ❌   |         |
+|   Data     |   💼   |         |
+|   Line     |   ➖   |         |
+|   Init     |   🎬   |         |
+|   Update     |   🆙   |         |
+|   Ok     |   🆗   |         |
+|   Build     |   🔧   |         |
+|   Aconstructor     |   🛠️   |         |
+|   NotFound     |   🚫   |         |
+|   Found     |   👁️‍🗨️   |         |
+|   Result     |   📌   |         |
+|   Input     |   📥   |         |
+|   Output     |   📤   |         |
+|   Function     |   🔨   |         |
+|   Key     |   🔑   |         |
+|   AccessToken     |   🔑   |         |
+|   RefreshToken     |   🗝️   |         |
+|   Transmit     |   📡   |         |
+|   Start     |   🏁   |         |
+|   Stop     |   🛑   |         |
+|   ArrowIn     |   =>   |         |
+|   ArrowOut     |   <=   |         |
+|   SmallArrowIn     |   ->   |         |
+|   SmallArrowOut     |   <-   |         |
+|   RequestGet     |   🔷   |         |
+|   RequestPost     |   🔶   |         |
