@@ -100,3 +100,21 @@ type Event struct {
 |   Param     |   📥   |          |
 |   ParamError     |   📥   |     ✔️    |
 |   Debug     |   💊   |          |
+
+## Development
+
+### Run the tests
+
+```bash
+go test -tags=emo
+```
+
+### Generate the code
+
+Run the codegen tools to build up the functions:
+
+```bash
+go run ref/codegen.go
+```
+
+This will regenerate the `emo_gen.go` file
