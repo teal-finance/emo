@@ -106,7 +106,13 @@ type Event struct {
 ### Run the tests
 
 ```bash
-go test -tags=emo
+make test
+```
+
+Visualize the tests coverage:
+
+```bash
+make cov
 ```
 
 ### Generate the code
@@ -115,7 +121,7 @@ Run the codegen tools to build up the functions from the `codegen/ref.json` file
 Build the Go library:
 
 ```bash
-go run codegen/main.go -go
+make gocodegen
 ```
 
 This will regenerate the `emo_gen.go` file
@@ -123,9 +129,13 @@ This will regenerate the `emo_gen.go` file
 Build the Typescript library:
 
 ```bash
-go run codegen/main.go -ts
+make tscodegen
 ```
 
 This will regenerate the `lang/typescript/src/emo_gen.ts` file
 
-To build all languages at once use no flag
+To build all languages at once:
+
+```bash
+make codegen
+```
