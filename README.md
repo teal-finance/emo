@@ -35,6 +35,14 @@ make gocodegen
 
 This will regenerate the `emo_gen.go` file
 
+Build the Python library:
+
+```bash
+make pycodegen
+```
+
+This will regenerate the `lang/python/pyemo/emo_gen.py` file
+
 Build the Typescript library:
 
 ```bash
