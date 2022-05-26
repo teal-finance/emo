@@ -5,6 +5,7 @@ Emoji based semantic scoped debuging for Go and Typescript/Javascript
 ## Documentation
 
 - [Go](doc/go/README.md) library
+- [Python](lang/python/README.md) library
 - [Typescript](doc/typescript/README.md) library
 
 Complete [events list](doc/events/README.md)
