@@ -28,7 +28,7 @@ make gocodegen
 
 This will regenerate the `emo_gen.go` file
 
-Build the Python library:
+#### Build the Python library
 
 ```bash
 make pycodegen
@@ -36,7 +36,7 @@ make pycodegen
 
 This will regenerate the `lang/python/pyemo/emo_gen.py` file
 
-#### Build the Typescript library:
+#### Build the Typescript library
 
 ```bash
 make tscodegen
@@ -44,7 +44,7 @@ make tscodegen
 
 This will regenerate the `lang/typescript/src/emo_gen.ts` file
 
-#### Build the Dart library:
+#### Build the Dart library
 
 ```bash
 make dartcodegen
