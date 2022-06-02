@@ -5,6 +5,7 @@ help:
 	# gocodegen        Generate code for the Go library
 	# tscodegen        Generate code for the Typescript library
 	# pycodegen        Generate code for the Python library
+	# dartcodegen      Generate code for the Dart library
 	#
 	# docgen           Generate the documentation
 	#
@@ -26,6 +27,10 @@ tscodegen:
 .PHONY: pycodegen
 pycodegen:
 	go run codegen/main.go -py
+
+.PHONY: pycodegen
+dartcodegen:
+	go run codegen/main.go -dart
 
 .PHONY: docgen
 docgen:

@@ -1,0 +1,12 @@
+name: emodebug
+description: Emoji based semantic debuging. Debug the state and execution flow of a program with familiar idioms
+homepage: https://github.com/teal-finance/emo
+version: "0.6.0"
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  extra_pedantic: ^1.2.0
+  meta: ^1.2.4
+  pedantic: ^1.9.2
