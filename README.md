@@ -11,19 +11,10 @@ Emoji based semantic scoped debuging for Go, Python, Typescript/Javascript and D
 
 Complete [events list](doc/events/README.md)
 
-## Development
+## How to contribute
 
-### Run the tests
-
-```bash
-make test
-```
-
-Visualize the tests coverage:
-
-```bash
-make cov
-```
+To add more emojis and methods please edit the [ref.json](codegen/ref.json) file. The code
+in all languages is generated in from this file
 
 ### Generate the code
 
@@ -72,4 +63,18 @@ Regenerate the complete events list
 
 ```bash
 make docgen
+```
+
+## Development
+
+### Run the tests
+
+```bash
+make test
+```
+
+Visualize the tests coverage:
+
+```bash
+make cov
 ```
