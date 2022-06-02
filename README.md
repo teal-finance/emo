@@ -11,7 +11,7 @@ Emoji based semantic scoped debuging for Go, Python, Typescript/Javascript and D
 
 Complete [events list](doc/events/README.md)
 
-## How to contribute
+## How to contribute
 
 To add more emojis and methods please edit the [ref.json](codegen/ref.json) file. The code
 in all languages is generated in from this file
