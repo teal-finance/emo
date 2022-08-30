@@ -1,46 +1,44 @@
 help:
 	# Use 'make <target>' where <target> is one of:
 	#
-	# codegen          Generate code for all language
-	# gocodegen        Generate code for the Go library
-	# tscodegen        Generate code for the Typescript library
-	# pycodegen        Generate code for the Python library
-	# dartcodegen      Generate code for the Dart library
+	# all   Generate all
+	# go    Generate code for the Go library
+	# ts    Generate code for the Typescript library
+	# py    Generate code for the Python library
+	# dart  Generate code for the Dart library
+	# doc   Generate the documentation
 	#
-	# docgen           Generate the documentation
-	#
-	# test             Run the tests on the Go library
-	# test             Run the tests on the Go library and visualize the coverage
+	# test  Test the Go library
+	# cov   Test and visualize the coverage
 
-.PHONY: codegen
-codegen:
+.PHONY: all
+all:
 	go run codegen/main.go
 
-.PHONY: gocodegen
-gocodegen:
+.PHONY: go
+go:
 	go run codegen/main.go -go
 
-.PHONY: tscodegen
-tscodegen:
+.PHONY: ts
+ts:
 	go run codegen/main.go -ts
 
-.PHONY: pycodegen
-pycodegen:
+.PHONY: py
+py:
 	go run codegen/main.go -py
 
-.PHONY: pycodegen
-dartcodegen:
+.PHONY: dart
+dart:
 	go run codegen/main.go -dart
 
-.PHONY: docgen
-docgen:
+.PHONY: doc
+doc:
 	go run codegen/main.go -doc
 
 .PHONY: test
 test:
-	go test -tags=emo -coverprofile=c.out
+	go test -race -vet all -tags=emo -coverprofile=c.out
 
 .PHONY: cov
 cov: test
 	go tool cover -html c.out
-

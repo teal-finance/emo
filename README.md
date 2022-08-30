@@ -1,6 +1,6 @@
 # Emo
 
-Emoji based semantic scoped debuging for Go, Python, Typescript/Javascript and Dart
+Emoji based semantic scoped debugging for Go, Python, Typescript/Javascript and Dart
 
 ## Documentation
 
@@ -13,25 +13,25 @@ Complete [events list](doc/events/README.md)
 
 ## How to contribute
 
-To add more emojis and methods please edit the [ref.json](codegen/ref.json) file. The code
-in all languages is generated in from this file
+To add more emojis and methods please edit the [`codegen/ref.json`](codegen/ref.json) file.
+The code in all languages is generated in from this file.
 
 ### Generate the code
 
-Run the codegen tools to build up the functions from the `codegen/ref.json` file. 
+Run the codegen tools to build up the functions from the [`codegen/ref.json`](codegen/ref.json) file.
 
 #### Build the Go library
 
 ```bash
-make gocodegen
+make go
 ```
 
-This will regenerate the `emo_gen.go` file
+This will regenerate the `generated.go` file
 
 #### Build the Python library
 
 ```bash
-make pycodegen
+make py
 ```
 
 This will regenerate the `lang/python/pyemo/emo_gen.py` file
@@ -39,7 +39,7 @@ This will regenerate the `lang/python/pyemo/emo_gen.py` file
 #### Build the Typescript library
 
 ```bash
-make tscodegen
+make ts
 ```
 
 This will regenerate the `lang/typescript/src/emo_gen.ts` file
@@ -47,22 +47,23 @@ This will regenerate the `lang/typescript/src/emo_gen.ts` file
 #### Build the Dart library
 
 ```bash
-make dartcodegen
+make dart
 ```
+
 This will regenerate the `lang/dart/lib/src/debug.dart` file
 
 #### Build all languages at once
 
 ```bash
-make codegen
+make all
 ```
 
 ### Generate the doc
 
-Regenerate the complete events list 
+Regenerate the complete events list:
 
 ```bash
-make docgen
+make doc
 ```
 
 ## Development
