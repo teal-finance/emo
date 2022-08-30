@@ -45,7 +45,7 @@ func genFunc(name, emoji string, isError bool) string {
 
 	return `
 func (zone Zone) ` + name + `(args ...any) Event {
-	if zone.Print {
+	if zone.Print || zone.Hook != nil {
 		return processEvent("` + emoji + `", zone, ` + strconv.FormatBool(isError) + `, args)
 	}
 	return Event{}
