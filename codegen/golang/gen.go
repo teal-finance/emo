@@ -22,7 +22,7 @@ func GenGo(ref []core.Ref) {
 
 	tmpl := codegen.MustParse(template)
 
-	fn, err := filepath.Abs("emo_gen.go")
+	fn, err := filepath.Abs("generated.go")
 	if err != nil {
 		log.Fatal(err)
 	}
