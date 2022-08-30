@@ -2,8 +2,9 @@ package main
 
 import (
 	"flag"
-	"fmt"
+	"log"
 
+	"github.com/teal-finance/emo/codegen/core"
 	"github.com/teal-finance/emo/codegen/dart"
 	"github.com/teal-finance/emo/codegen/doc"
 	"github.com/teal-finance/emo/codegen/golang"
@@ -12,54 +13,45 @@ import (
 )
 
 func main() {
-	tsf := flag.Bool("ts", false, "generate Typescript code")
-	gof := flag.Bool("go", false, "generate Go code")
-	pyf := flag.Bool("py", false, "generate Python code")
+	log.Print("Generator of emo source code")
+
 	dartf := flag.Bool("dart", false, "generate Dart code")
 	docf := flag.Bool("doc", false, "generate the documentation")
+	gof := flag.Bool("go", false, "generate Go code")
+	pyf := flag.Bool("py", false, "generate Python code")
+	tsf := flag.Bool("ts", false, "generate Typescript code")
 	flag.Parse()
 
-	hasFlag := false
-	if *docf {
-		hasFlag = true
-		fmt.Println("Generating documentation")
-		doc.GenDoc()
-		return
+	hasFlag := *dartf || *docf || *gof || *pyf || *tsf
+	enableAll := !hasFlag
+	if enableAll {
+		log.Print("No flag => generate code for all languages")
 	}
 
-	if *tsf {
-		hasFlag = true
-		fmt.Println("Generating Typescript code")
-		ts.GenTs()
-		return
+	ref := core.GetRef()
+
+	if enableAll || *dartf {
+		log.Print("Generating Dart code")
+		dart.GenCode(ref)
 	}
 
-	if *pyf {
-		hasFlag = true
-		fmt.Println("Generating Python code")
-		py.GenPy()
-		return
+	if enableAll || *docf {
+		log.Print("Generating documentation")
+		doc.GenDoc(ref)
 	}
 
-	if *dartf {
-		hasFlag = true
-		fmt.Println("Generating Dart code")
-		dart.GenCode()
-		return
+	if enableAll || *gof {
+		log.Print("Generating Go code")
+		golang.GenGo(ref)
 	}
 
-	if *gof {
-		hasFlag = true
-		fmt.Println("Generating Go code")
-		golang.GenGo()
-		return
+	if enableAll || *pyf {
+		log.Print("Generating Python code")
+		py.GenPy(ref)
 	}
 
-	if !hasFlag {
-		fmt.Println("Generating code for all languages")
-		ts.GenTs()
-		golang.GenGo()
-		py.GenPy()
-		dart.GenCode()
+	if enableAll || *tsf {
+		log.Print("Generating Typescript code")
+		ts.GenTs(ref)
 	}
 }
