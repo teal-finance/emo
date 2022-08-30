@@ -3,11 +3,17 @@
 package emo
 
 func (zone Zone) Info(args ...any) Event {
-	return processEvent("ℹ️", zone, false, args)
+	if zone.Print {
+		return processEvent("ℹ️", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Warning(args ...any) Event {
-	return processEvent("🔔", zone, false, args)
+	if zone.Print {
+		return processEvent("🔔", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Error(args ...any) Event {
@@ -15,7 +21,10 @@ func (zone Zone) Error(args ...any) Event {
 }
 
 func (zone Zone) Query(args ...any) Event {
-	return processEvent("🗄️", zone, false, args)
+	if zone.Print {
+		return processEvent("🗄️", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) QueryError(args ...any) Event {
@@ -23,7 +32,10 @@ func (zone Zone) QueryError(args ...any) Event {
 }
 
 func (zone Zone) Encrypt(args ...any) Event {
-	return processEvent("🎼", zone, false, args)
+	if zone.Print {
+		return processEvent("🎼", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) EncryptError(args ...any) Event {
@@ -31,7 +43,10 @@ func (zone Zone) EncryptError(args ...any) Event {
 }
 
 func (zone Zone) Decrypt(args ...any) Event {
-	return processEvent("🗝️", zone, false, args)
+	if zone.Print {
+		return processEvent("🗝️", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) DecryptError(args ...any) Event {
@@ -39,7 +54,10 @@ func (zone Zone) DecryptError(args ...any) Event {
 }
 
 func (zone Zone) Time(args ...any) Event {
-	return processEvent("⏱️", zone, false, args)
+	if zone.Print {
+		return processEvent("⏱️", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) TimeError(args ...any) Event {
@@ -47,7 +65,10 @@ func (zone Zone) TimeError(args ...any) Event {
 }
 
 func (zone Zone) Param(args ...any) Event {
-	return processEvent("📩", zone, false, args)
+	if zone.Print {
+		return processEvent("📩", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) ParamError(args ...any) Event {
@@ -55,117 +76,204 @@ func (zone Zone) ParamError(args ...any) Event {
 }
 
 func (zone Zone) Debug(args ...any) Event {
-	return processEvent("💊", zone, false, args)
+	if zone.Print {
+		return processEvent("💊", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) State(args ...any) Event {
-	return processEvent("📢", zone, false, args)
+	if zone.Print {
+		return processEvent("📢", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Save(args ...any) Event {
-	return processEvent("💾", zone, false, args)
+	if zone.Print {
+		return processEvent("💾", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Delete(args ...any) Event {
-	return processEvent("❌", zone, false, args)
+	if zone.Print {
+		return processEvent("❌", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Data(args ...any) Event {
-	return processEvent("💼", zone, false, args)
+	if zone.Print {
+		return processEvent("💼", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Line(args ...any) Event {
-	return processEvent("➖", zone, false, args)
+	if zone.Print {
+		return processEvent("➖", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Init(args ...any) Event {
-	return processEvent("🎬", zone, false, args)
+	if zone.Print {
+		return processEvent("🎬", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Update(args ...any) Event {
-	return processEvent("🆙", zone, false, args)
+	if zone.Print {
+		return processEvent("🆙", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Ok(args ...any) Event {
-	return processEvent("🆗", zone, false, args)
+	if zone.Print {
+		return processEvent("🆗", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Build(args ...any) Event {
-	return processEvent("🔧", zone, false, args)
+	if zone.Print {
+		return processEvent("🔧", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Aconstructor(args ...any) Event {
-	return processEvent("🛠️", zone, false, args)
+	if zone.Print {
+		return processEvent("🛠️", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) NotFound(args ...any) Event {
-	return processEvent("🚫", zone, false, args)
+	if zone.Print {
+		return processEvent("🚫", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Found(args ...any) Event {
-	return processEvent("👁️‍🗨️", zone, false, args)
+	if zone.Print {
+		return processEvent("👁️‍🗨️", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Result(args ...any) Event {
-	return processEvent("📌", zone, false, args)
+	if zone.Print {
+		return processEvent("📌", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Input(args ...any) Event {
-	return processEvent("📥", zone, false, args)
+	if zone.Print {
+		return processEvent("📥", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Output(args ...any) Event {
-	return processEvent("📤", zone, false, args)
+	if zone.Print {
+		return processEvent("📤", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Function(args ...any) Event {
-	return processEvent("🔨", zone, false, args)
+	if zone.Print {
+		return processEvent("🔨", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Key(args ...any) Event {
-	return processEvent("🔑", zone, false, args)
+	if zone.Print {
+		return processEvent("🔑", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) AccessToken(args ...any) Event {
-	return processEvent("🔑", zone, false, args)
+	if zone.Print {
+		return processEvent("🔑", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) RefreshToken(args ...any) Event {
-	return processEvent("🗝️", zone, false, args)
+	if zone.Print {
+		return processEvent("🗝️", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Transmit(args ...any) Event {
-	return processEvent("📡", zone, false, args)
+	if zone.Print {
+		return processEvent("📡", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Start(args ...any) Event {
-	return processEvent("🏁", zone, false, args)
+	if zone.Print {
+		return processEvent("🏁", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) Stop(args ...any) Event {
-	return processEvent("🛑", zone, false, args)
+	if zone.Print {
+		return processEvent("🛑", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) ArrowIn(args ...any) Event {
-	return processEvent("=>", zone, false, args)
+	if zone.Print {
+		return processEvent("=>", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) ArrowOut(args ...any) Event {
-	return processEvent("<=", zone, false, args)
+	if zone.Print {
+		return processEvent("<=", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) SmallArrowIn(args ...any) Event {
-	return processEvent("->", zone, false, args)
+	if zone.Print {
+		return processEvent("->", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) SmallArrowOut(args ...any) Event {
-	return processEvent("<-", zone, false, args)
+	if zone.Print {
+		return processEvent("<-", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) RequestGet(args ...any) Event {
-	return processEvent("🔷", zone, false, args)
+	if zone.Print {
+		return processEvent("🔷", zone, false, args)
+	}
+	return Event{}
 }
 
 func (zone Zone) RequestPost(args ...any) Event {
-	return processEvent("🔶", zone, false, args)
+	if zone.Print {
+		return processEvent("🔶", zone, false, args)
+	}
+	return Event{}
 }
