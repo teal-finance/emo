@@ -28,7 +28,7 @@ type Event struct {
 	IsError bool
 }
 
-// NewZone : create a zone constructor.
+// NewZone : create a logger.
 func NewZone(name string, print ...bool) Zone {
 	p := true
 	if len(print) > 0 {
@@ -54,14 +54,14 @@ func NewZoneWithHook(name string, hook func(Event), print ...bool) Zone {
 }
 
 // ObjectInfo : print debug info about something.
-func ObjectInfo(args ...interface{}) {
+func ObjectInfo(args ...any) {
 	msg := "[" + color.Yellow("object info") + "] "
 	for _, a := range args {
 		fmt.Println(msg+"Type: %T Value: %#v", a, a)
 	}
 }
 
-func processEvent(emoji string, zone Zone, isError bool, args []interface{}) Event {
+func processEvent(emoji string, zone Zone, isError bool, args []any) Event {
 	event := newEvent(emoji, zone, isError, args)
 
 	if isError || zone.Print {
@@ -75,7 +75,7 @@ func processEvent(emoji string, zone Zone, isError bool, args []interface{}) Eve
 	return event
 }
 
-func newEvent(emoji string, zone Zone, isError bool, args []interface{}) Event {
+func newEvent(emoji string, zone Zone, isError bool, args []any) Event {
 	pc := make([]uintptr, 1)
 	runtime.Callers(4, pc)
 	f := runtime.FuncForPC(pc[0])
@@ -92,7 +92,7 @@ func newEvent(emoji string, zone Zone, isError bool, args []interface{}) Event {
 	}
 }
 
-func concatenateErrors(args []interface{}) error {
+func concatenateErrors(args []any) error {
 	texts := []string{}
 
 	for _, a := range args {
