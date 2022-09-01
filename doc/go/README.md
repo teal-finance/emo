@@ -22,7 +22,7 @@ zone.Info("An info message")
 
 Output:
 
-> [myLib] ℹ️  An info message
+> `[myLib] ℹ️  An info message`
 
 ### Errors
 
@@ -37,7 +37,7 @@ zone.Error("An error has occurred:", err)
 
 Output:
 
-> [myLib] Error 📥  An error has occurred: PARAM ERROR from main.main in emo/examples/example.go:17
+> `[myLib] 📥 ERROR  An error has occurred: PARAM ERROR from main.main in emo/examples/example.go:17`
 
 It prints additional information about the file and the line
 if the event is of type error
@@ -61,23 +61,23 @@ It will be executed each time an event is fired:
 
 ```go
 func hook(evt emo.Event) {
-  fmt.Println("Event hook", evt.Error)
+    fmt.Println("Event hook", evt.Error)
 }
 
 zone := emo.NewLoggerWithHook("example", hook)
 zone.Debug("Test msg")
 ```
 
-Structure of an `Event`:
+Exported fields of an `Event`:
 
 ```go
 type Event struct {
-  Error   error
-  Emoji   string
-  From    string
-  File    string
-  Log     Zone
-  Line    int
-  IsError bool
+    Emoji   string
+    Zone    Zone
+    IsError bool
+    Args    []any
+    From    string
+    File    string
+    Line    int
 }
 ```
