@@ -43,22 +43,31 @@ const (
 // - print=false => print only when isError, default is true
 // - date=true => prefix the log with the current timestamp, default is false
 // - color=true => print colors (use color=false for testing), default is true
-// - skip=absent (default) => print the call stack info when Print=true and isError, true => always, false => never
+// - stack=absent (default) => print the call stack info when Print=true and isError, true => always, false => never
 func NewZone(name string, args ...bool) Zone {
 	return NewLoggerWithHook(name, nil, args...)
 }
 
 // NewLoggerWithHook : create a Zone with a function hook
 func NewLoggerWithHook(name string, hook func(Event), args ...bool) Zone {
-	print, date, color, skip := optional(args)
+	print, date, color, stack := optional(args)
 	return Zone{
 		Name:  name,
 		Print: print,
 		Date:  date,
 		Color: color,
-		Skip:  skip,
+		Skip:  stack,
 		Hook:  hook,
 	}
+}
+
+// P forces the log to be printed, even when zone.Pint=false.
+func (zone Zone) P(print ...bool) Zone {
+	zone.Print = true
+	if len(print) > 0 {
+		zone.Print = print[0]
+	}
+	return zone
 }
 
 // S forces the print of the call stack info (caller function and file:line).
@@ -67,15 +76,6 @@ func (zone Zone) S(skip ...int) Zone {
 	zone.Skip = StackYes
 	if len(skip) > 0 {
 		zone.Skip = StackEnum(skip[0])
-	}
-	return zone
-}
-
-// P forces the log to be printed, even when zone.Pint=false.
-func (zone Zone) P(print ...bool) Zone {
-	zone.Print = true
-	if len(print) > 0 {
-		zone.Print = print[0]
 	}
 	return zone
 }
@@ -136,25 +136,25 @@ func (e Event) Err() error {
 	return &e
 }
 
-func optional(args []bool) (print, date, color bool, skip StackEnum) {
+func optional(args []bool) (print, date, color bool, stack StackEnum) {
 	// default values
-	print, date, color, skip = true, false, true, StackAuto
+	print, date, color, stack = true, false, true, StackAuto
 
 	switch len(args) {
 	case 0:
-		return print, date, color, skip
+		return print, date, color, stack
 	case 1:
-		return args[0], date, color, skip
+		return args[0], date, color, stack
 	case 2:
-		return args[0], args[1], color, skip
+		return args[0], args[1], color, stack
 	case 3:
-		return args[0], args[1], args[2], skip
+		return args[0], args[1], args[2], stack
 	default:
-		skip := StackNo
+		stack = StackNo
 		if args[3] {
-			skip = StackYes
+			stack = StackYes
 		}
-		return args[0], args[1], args[2], skip
+		return args[0], args[1], args[2], stack
 	}
 }
 
