@@ -6,7 +6,7 @@ import (
 	"github.com/teal-finance/emo"
 )
 
-func hook(err emo.Error) {
+func hook(err emo.Event) {
 	fmt.Println("Event hook", err)
 }
 

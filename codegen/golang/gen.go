@@ -37,18 +37,19 @@ func GenGo(ref []core.Ref) {
 func genFunc(name, emoji string, isError bool) string {
 	if isError {
 		return `
-func (l Logger) ` + name + `(args ...any) Error {
+func (l Logger) ` + name + `(args ...any) Event {
 	return processEvent("` + emoji + `", l, ` + strconv.FormatBool(isError) + `, args)
 }
 	`
 	}
 
 	return `
-func (l Logger) ` + name + `(args ...any) Error {
+func (l Logger) ` + name + `(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("` + emoji + `", l, ` + strconv.FormatBool(isError) + `, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 `
 }

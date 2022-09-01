@@ -2,278 +2,314 @@
 
 package emo
 
-func (l Logger) Info(args ...any) Error {
+func (l Logger) Info(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("ℹ️", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Warning(args ...any) Error {
+func (l Logger) Warning(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("🔔", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Error(args ...any) Error {
+func (l Logger) Error(args ...any) Event {
 	return processEvent("💢", l, true, args)
 }
 
-func (l Logger) Query(args ...any) Error {
+func (l Logger) Query(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("🗄️", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) QueryError(args ...any) Error {
+func (l Logger) QueryError(args ...any) Event {
 	return processEvent("🗄️", l, true, args)
 }
 
-func (l Logger) Encrypt(args ...any) Error {
+func (l Logger) Encrypt(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("🎼", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) EncryptError(args ...any) Error {
+func (l Logger) EncryptError(args ...any) Event {
 	return processEvent("🎼", l, true, args)
 }
 
-func (l Logger) Decrypt(args ...any) Error {
+func (l Logger) Decrypt(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("🗝️", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) DecryptError(args ...any) Error {
+func (l Logger) DecryptError(args ...any) Event {
 	return processEvent("🗝️", l, true, args)
 }
 
-func (l Logger) Time(args ...any) Error {
+func (l Logger) Time(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("⏱️", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) TimeError(args ...any) Error {
+func (l Logger) TimeError(args ...any) Event {
 	return processEvent("⏱️", l, true, args)
 }
 
-func (l Logger) Param(args ...any) Error {
+func (l Logger) Param(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("📩", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) ParamError(args ...any) Error {
+func (l Logger) ParamError(args ...any) Event {
 	return processEvent("📩", l, true, args)
 }
 
-func (l Logger) Debug(args ...any) Error {
+func (l Logger) Debug(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("💊", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) State(args ...any) Error {
+func (l Logger) State(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("📢", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Save(args ...any) Error {
+func (l Logger) Save(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("💾", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Delete(args ...any) Error {
+func (l Logger) Delete(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("❌", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Data(args ...any) Error {
+func (l Logger) Data(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("💼", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Line(args ...any) Error {
+func (l Logger) Line(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("➖", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Init(args ...any) Error {
+func (l Logger) Init(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("🎬", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Update(args ...any) Error {
+func (l Logger) Update(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("🆙", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Ok(args ...any) Error {
+func (l Logger) Ok(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("🆗", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Build(args ...any) Error {
+func (l Logger) Build(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("🔧", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Aconstructor(args ...any) Error {
+func (l Logger) Aconstructor(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("🛠️", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) NotFound(args ...any) Error {
+func (l Logger) NotFound(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("🚫", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Found(args ...any) Error {
+func (l Logger) Found(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("👁️‍🗨️", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Result(args ...any) Error {
+func (l Logger) Result(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("📌", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Input(args ...any) Error {
+func (l Logger) Input(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("📥", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Output(args ...any) Error {
+func (l Logger) Output(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("📤", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Function(args ...any) Error {
+func (l Logger) Function(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("🔨", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Key(args ...any) Error {
+func (l Logger) Key(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("🔑", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) AccessToken(args ...any) Error {
+func (l Logger) AccessToken(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("🔑", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) RefreshToken(args ...any) Error {
+func (l Logger) RefreshToken(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("🗝️", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Transmit(args ...any) Error {
+func (l Logger) Transmit(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("📡", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Start(args ...any) Error {
+func (l Logger) Start(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("🏁", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) Stop(args ...any) Error {
+func (l Logger) Stop(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("🛑", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) ArrowIn(args ...any) Error {
+func (l Logger) ArrowIn(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("=>", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) ArrowOut(args ...any) Error {
+func (l Logger) ArrowOut(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("<=", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) SmallArrowIn(args ...any) Error {
+func (l Logger) SmallArrowIn(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("->", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) SmallArrowOut(args ...any) Error {
+func (l Logger) SmallArrowOut(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("<-", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) RequestGet(args ...any) Error {
+func (l Logger) RequestGet(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("🔷", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
 
-func (l Logger) RequestPost(args ...any) Error {
+func (l Logger) RequestPost(args ...any) Event {
 	if l.Print || l.Hook != nil {
 		return processEvent("🔶", l, false, args)
 	}
-	return Error{}
+	var evt Event
+	return evt
 }
