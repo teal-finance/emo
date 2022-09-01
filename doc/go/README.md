@@ -22,7 +22,7 @@ zone.Info("An info message")
 
 Output:
 
-> `[myLib] ℹ️  An info message`
+`[myLib] ℹ️  An info message`
 
 ## Errors
 
@@ -37,7 +37,7 @@ zone.Error("An error has occurred:", err)
 
 Output:
 
-> `[myLib] 📥  ERROR An error has occurred: PARAM ERROR from main.main in emo/examples/example.go:17`
+`[myLib] 📥  ERROR An error has occurred: PARAM ERROR from main.main in emo/examples/example.go:17`
 
 It prints additional information about the file and the line
 if the event is of type error
