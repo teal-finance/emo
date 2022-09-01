@@ -2,43 +2,64 @@
 
 package emo
 
-import (
-	"fmt"
-	"log"
-)
+import "fmt"
+
+func Info(args ...any) Event {
+	return DefaultZone.Info(args...)
+}
+
+func Infof(format string, v ...any) Event {
+	return DefaultZone.Infof(format, v...)
+}
 
 func (zone Zone) Info(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("ℹ️", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("ℹ️", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Infof(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Info(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Info(s)
+}
+
+func Warning(args ...any) Event {
+	return DefaultZone.Warning(args...)
+}
+
+func Warningf(format string, v ...any) Event {
+	return DefaultZone.Warningf(format, v...)
 }
 
 func (zone Zone) Warning(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("🔔", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("🔔", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Warningf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Warning(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Warning(s)
+}
+
+func Error(args ...any) Event {
+	return DefaultZone.Error(args...)
+}
+
+func Errorf(format string, v ...any) Event {
+	return DefaultZone.Errorf(format, v...)
 }
 
 func (zone Zone) Error(args ...any) Event {
@@ -50,21 +71,37 @@ func (zone Zone) Errorf(format string, v ...any) Event {
 	return zone.Error(s)
 }
 
+func Query(args ...any) Event {
+	return DefaultZone.Query(args...)
+}
+
+func Queryf(format string, v ...any) Event {
+	return DefaultZone.Queryf(format, v...)
+}
+
 func (zone Zone) Query(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("🗄️", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("🗄️", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Queryf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Query(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Query(s)
+}
+
+func QueryError(args ...any) Event {
+	return DefaultZone.QueryError(args...)
+}
+
+func QueryErrorf(format string, v ...any) Event {
+	return DefaultZone.QueryErrorf(format, v...)
 }
 
 func (zone Zone) QueryError(args ...any) Event {
@@ -76,21 +113,37 @@ func (zone Zone) QueryErrorf(format string, v ...any) Event {
 	return zone.QueryError(s)
 }
 
+func Encrypt(args ...any) Event {
+	return DefaultZone.Encrypt(args...)
+}
+
+func Encryptf(format string, v ...any) Event {
+	return DefaultZone.Encryptf(format, v...)
+}
+
 func (zone Zone) Encrypt(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("🎼", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("🎼", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Encryptf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Encrypt(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Encrypt(s)
+}
+
+func EncryptError(args ...any) Event {
+	return DefaultZone.EncryptError(args...)
+}
+
+func EncryptErrorf(format string, v ...any) Event {
+	return DefaultZone.EncryptErrorf(format, v...)
 }
 
 func (zone Zone) EncryptError(args ...any) Event {
@@ -102,21 +155,37 @@ func (zone Zone) EncryptErrorf(format string, v ...any) Event {
 	return zone.EncryptError(s)
 }
 
+func Decrypt(args ...any) Event {
+	return DefaultZone.Decrypt(args...)
+}
+
+func Decryptf(format string, v ...any) Event {
+	return DefaultZone.Decryptf(format, v...)
+}
+
 func (zone Zone) Decrypt(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("🗝️", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("🗝️", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Decryptf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Decrypt(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Decrypt(s)
+}
+
+func DecryptError(args ...any) Event {
+	return DefaultZone.DecryptError(args...)
+}
+
+func DecryptErrorf(format string, v ...any) Event {
+	return DefaultZone.DecryptErrorf(format, v...)
 }
 
 func (zone Zone) DecryptError(args ...any) Event {
@@ -128,21 +197,37 @@ func (zone Zone) DecryptErrorf(format string, v ...any) Event {
 	return zone.DecryptError(s)
 }
 
+func Time(args ...any) Event {
+	return DefaultZone.Time(args...)
+}
+
+func Timef(format string, v ...any) Event {
+	return DefaultZone.Timef(format, v...)
+}
+
 func (zone Zone) Time(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("⏱️", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("⏱️", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Timef(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Time(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Time(s)
+}
+
+func TimeError(args ...any) Event {
+	return DefaultZone.TimeError(args...)
+}
+
+func TimeErrorf(format string, v ...any) Event {
+	return DefaultZone.TimeErrorf(format, v...)
 }
 
 func (zone Zone) TimeError(args ...any) Event {
@@ -154,21 +239,37 @@ func (zone Zone) TimeErrorf(format string, v ...any) Event {
 	return zone.TimeError(s)
 }
 
+func Param(args ...any) Event {
+	return DefaultZone.Param(args...)
+}
+
+func Paramf(format string, v ...any) Event {
+	return DefaultZone.Paramf(format, v...)
+}
+
 func (zone Zone) Param(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("📩", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("📩", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Paramf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Param(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Param(s)
+}
+
+func ParamError(args ...any) Event {
+	return DefaultZone.ParamError(args...)
+}
+
+func ParamErrorf(format string, v ...any) Event {
+	return DefaultZone.ParamErrorf(format, v...)
 }
 
 func (zone Zone) ParamError(args ...any) Event {
@@ -180,530 +281,727 @@ func (zone Zone) ParamErrorf(format string, v ...any) Event {
 	return zone.ParamError(s)
 }
 
+func Debug(args ...any) Event {
+	return DefaultZone.Debug(args...)
+}
+
+func Debugf(format string, v ...any) Event {
+	return DefaultZone.Debugf(format, v...)
+}
+
 func (zone Zone) Debug(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("💊", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("💊", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Debugf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Debug(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Debug(s)
+}
+
+func State(args ...any) Event {
+	return DefaultZone.State(args...)
+}
+
+func Statef(format string, v ...any) Event {
+	return DefaultZone.Statef(format, v...)
 }
 
 func (zone Zone) State(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("📢", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("📢", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Statef(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.State(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.State(s)
+}
+
+func Save(args ...any) Event {
+	return DefaultZone.Save(args...)
+}
+
+func Savef(format string, v ...any) Event {
+	return DefaultZone.Savef(format, v...)
 }
 
 func (zone Zone) Save(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("💾", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("💾", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Savef(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Save(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Save(s)
+}
+
+func Delete(args ...any) Event {
+	return DefaultZone.Delete(args...)
+}
+
+func Deletef(format string, v ...any) Event {
+	return DefaultZone.Deletef(format, v...)
 }
 
 func (zone Zone) Delete(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("❌", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("❌", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Deletef(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Delete(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Delete(s)
+}
+
+func Data(args ...any) Event {
+	return DefaultZone.Data(args...)
+}
+
+func Dataf(format string, v ...any) Event {
+	return DefaultZone.Dataf(format, v...)
 }
 
 func (zone Zone) Data(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("💼", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("💼", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Dataf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Data(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Data(s)
+}
+
+func Line(args ...any) Event {
+	return DefaultZone.Line(args...)
+}
+
+func Linef(format string, v ...any) Event {
+	return DefaultZone.Linef(format, v...)
 }
 
 func (zone Zone) Line(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("➖", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("➖", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Linef(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Line(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Line(s)
+}
+
+func Init(args ...any) Event {
+	return DefaultZone.Init(args...)
+}
+
+func Initf(format string, v ...any) Event {
+	return DefaultZone.Initf(format, v...)
 }
 
 func (zone Zone) Init(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("🎬", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("🎬", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Initf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Init(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Init(s)
+}
+
+func Update(args ...any) Event {
+	return DefaultZone.Update(args...)
+}
+
+func Updatef(format string, v ...any) Event {
+	return DefaultZone.Updatef(format, v...)
 }
 
 func (zone Zone) Update(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("🆙", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("🆙", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Updatef(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Update(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Update(s)
+}
+
+func Ok(args ...any) Event {
+	return DefaultZone.Ok(args...)
+}
+
+func Okf(format string, v ...any) Event {
+	return DefaultZone.Okf(format, v...)
 }
 
 func (zone Zone) Ok(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("🆗", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("🆗", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Okf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Ok(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Ok(s)
+}
+
+func Build(args ...any) Event {
+	return DefaultZone.Build(args...)
+}
+
+func Buildf(format string, v ...any) Event {
+	return DefaultZone.Buildf(format, v...)
 }
 
 func (zone Zone) Build(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("🔧", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("🔧", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Buildf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Build(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Build(s)
+}
+
+func Aconstructor(args ...any) Event {
+	return DefaultZone.Aconstructor(args...)
+}
+
+func Aconstructorf(format string, v ...any) Event {
+	return DefaultZone.Aconstructorf(format, v...)
 }
 
 func (zone Zone) Aconstructor(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("🛠️", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("🛠️", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Aconstructorf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Aconstructor(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Aconstructor(s)
+}
+
+func NotFound(args ...any) Event {
+	return DefaultZone.NotFound(args...)
+}
+
+func NotFoundf(format string, v ...any) Event {
+	return DefaultZone.NotFoundf(format, v...)
 }
 
 func (zone Zone) NotFound(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("🚫", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("🚫", false, args...).Print().CallHook()
 }
 
 func (zone Zone) NotFoundf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.NotFound(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.NotFound(s)
+}
+
+func Found(args ...any) Event {
+	return DefaultZone.Found(args...)
+}
+
+func Foundf(format string, v ...any) Event {
+	return DefaultZone.Foundf(format, v...)
 }
 
 func (zone Zone) Found(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("👁️‍🗨️", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("👁️‍🗨️", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Foundf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Found(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Found(s)
+}
+
+func Result(args ...any) Event {
+	return DefaultZone.Result(args...)
+}
+
+func Resultf(format string, v ...any) Event {
+	return DefaultZone.Resultf(format, v...)
 }
 
 func (zone Zone) Result(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("📌", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("📌", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Resultf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Result(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Result(s)
+}
+
+func Input(args ...any) Event {
+	return DefaultZone.Input(args...)
+}
+
+func Inputf(format string, v ...any) Event {
+	return DefaultZone.Inputf(format, v...)
 }
 
 func (zone Zone) Input(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("📥", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("📥", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Inputf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Input(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Input(s)
+}
+
+func Output(args ...any) Event {
+	return DefaultZone.Output(args...)
+}
+
+func Outputf(format string, v ...any) Event {
+	return DefaultZone.Outputf(format, v...)
 }
 
 func (zone Zone) Output(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("📤", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("📤", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Outputf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Output(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Output(s)
+}
+
+func Function(args ...any) Event {
+	return DefaultZone.Function(args...)
+}
+
+func Functionf(format string, v ...any) Event {
+	return DefaultZone.Functionf(format, v...)
 }
 
 func (zone Zone) Function(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("🔨", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("🔨", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Functionf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Function(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Function(s)
+}
+
+func Key(args ...any) Event {
+	return DefaultZone.Key(args...)
+}
+
+func Keyf(format string, v ...any) Event {
+	return DefaultZone.Keyf(format, v...)
 }
 
 func (zone Zone) Key(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("🔑", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("🔑", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Keyf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Key(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Key(s)
+}
+
+func AccessToken(args ...any) Event {
+	return DefaultZone.AccessToken(args...)
+}
+
+func AccessTokenf(format string, v ...any) Event {
+	return DefaultZone.AccessTokenf(format, v...)
 }
 
 func (zone Zone) AccessToken(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("🔑", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("🔑", false, args...).Print().CallHook()
 }
 
 func (zone Zone) AccessTokenf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.AccessToken(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.AccessToken(s)
+}
+
+func RefreshToken(args ...any) Event {
+	return DefaultZone.RefreshToken(args...)
+}
+
+func RefreshTokenf(format string, v ...any) Event {
+	return DefaultZone.RefreshTokenf(format, v...)
 }
 
 func (zone Zone) RefreshToken(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("🗝️", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("🗝️", false, args...).Print().CallHook()
 }
 
 func (zone Zone) RefreshTokenf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.RefreshToken(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.RefreshToken(s)
+}
+
+func Transmit(args ...any) Event {
+	return DefaultZone.Transmit(args...)
+}
+
+func Transmitf(format string, v ...any) Event {
+	return DefaultZone.Transmitf(format, v...)
 }
 
 func (zone Zone) Transmit(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("📡", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("📡", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Transmitf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Transmit(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Transmit(s)
+}
+
+func Start(args ...any) Event {
+	return DefaultZone.Start(args...)
+}
+
+func Startf(format string, v ...any) Event {
+	return DefaultZone.Startf(format, v...)
 }
 
 func (zone Zone) Start(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("🏁", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("🏁", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Startf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Start(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Start(s)
+}
+
+func Stop(args ...any) Event {
+	return DefaultZone.Stop(args...)
+}
+
+func Stopf(format string, v ...any) Event {
+	return DefaultZone.Stopf(format, v...)
 }
 
 func (zone Zone) Stop(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("🛑", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("🛑", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Stopf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.Stop(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.Stop(s)
+}
+
+func ArrowIn(args ...any) Event {
+	return DefaultZone.ArrowIn(args...)
+}
+
+func ArrowInf(format string, v ...any) Event {
+	return DefaultZone.ArrowInf(format, v...)
 }
 
 func (zone Zone) ArrowIn(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("=>", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("=>", false, args...).Print().CallHook()
 }
 
 func (zone Zone) ArrowInf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.ArrowIn(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.ArrowIn(s)
+}
+
+func ArrowOut(args ...any) Event {
+	return DefaultZone.ArrowOut(args...)
+}
+
+func ArrowOutf(format string, v ...any) Event {
+	return DefaultZone.ArrowOutf(format, v...)
 }
 
 func (zone Zone) ArrowOut(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("<=", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("<=", false, args...).Print().CallHook()
 }
 
 func (zone Zone) ArrowOutf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.ArrowOut(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.ArrowOut(s)
+}
+
+func SmallArrowIn(args ...any) Event {
+	return DefaultZone.SmallArrowIn(args...)
+}
+
+func SmallArrowInf(format string, v ...any) Event {
+	return DefaultZone.SmallArrowInf(format, v...)
 }
 
 func (zone Zone) SmallArrowIn(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("->", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("->", false, args...).Print().CallHook()
 }
 
 func (zone Zone) SmallArrowInf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.SmallArrowIn(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.SmallArrowIn(s)
+}
+
+func SmallArrowOut(args ...any) Event {
+	return DefaultZone.SmallArrowOut(args...)
+}
+
+func SmallArrowOutf(format string, v ...any) Event {
+	return DefaultZone.SmallArrowOutf(format, v...)
 }
 
 func (zone Zone) SmallArrowOut(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("<-", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("<-", false, args...).Print().CallHook()
 }
 
 func (zone Zone) SmallArrowOutf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.SmallArrowOut(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.SmallArrowOut(s)
+}
+
+func RequestGet(args ...any) Event {
+	return DefaultZone.RequestGet(args...)
+}
+
+func RequestGetf(format string, v ...any) Event {
+	return DefaultZone.RequestGetf(format, v...)
 }
 
 func (zone Zone) RequestGet(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("🔷", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("🔷", false, args...).Print().CallHook()
 }
 
 func (zone Zone) RequestGetf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.RequestGet(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	s := fmt.Sprintf(format, v...)
+	return zone.RequestGet(s)
+}
+
+func RequestPost(args ...any) Event {
+	return DefaultZone.RequestPost(args...)
+}
+
+func RequestPostf(format string, v ...any) Event {
+	return DefaultZone.RequestPostf(format, v...)
 }
 
 func (zone Zone) RequestPost(args ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		return zone.NewEvent("🔶", false, args...).Print().CallHook()
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
+	return zone.NewEvent("🔶", false, args...).Print().CallHook()
 }
 
 func (zone Zone) RequestPostf(format string, v ...any) Event {
-	if zone.PrintAll || (zone.Hook != nil) {
-		s := fmt.Sprintf(format, v...)
-		return zone.RequestPost(s)
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
 	}
-	var evt Event
-	return evt
-}
-
-func (zone Zone) Default() *log.Logger {
-	return log.Default()
-}
-
-func (zone Zone) Print(args ...any) Event {
-	return zone.P().NewEvent("📰", false, args...).Print()
-}
-
-func (zone Zone) Printf(format string, v ...any) Event {
 	s := fmt.Sprintf(format, v...)
-	return zone.P().NewEvent("📰", false, s).Print()
-}
-
-func (zone Zone) Fatal(args ...any) {
-	m := zone.NewEvent("🤯", true, args...).Message()
-	log.Fatal(m)
-}
-
-func (zone Zone) Fatalf(format string, v ...any) {
-	s := fmt.Sprintf(format, v...)
-	m := zone.NewEvent("🤯", true, s).Message()
-	log.Fatal(m)
-}
-
-func (zone Zone) Panic(args ...any) {
-	m := zone.NewEvent("😵", true, args...).Message()
-	log.Panic(m)
-}
-
-func (zone Zone) Panicf(format string, v ...any) {
-	s := fmt.Sprintf(format, v...)
-	m := zone.NewEvent("😵", true, s).Message()
-	log.Panic(m)
+	return zone.RequestPost(s)
 }

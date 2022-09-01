@@ -37,7 +37,7 @@ zone.Error("An error has occurred:", err)
 
 Output:
 
-> `[myLib] 📥 ERROR  An error has occurred: PARAM ERROR from main.main in emo/examples/example.go:17`
+> `[myLib] 📥  ERROR An error has occurred: PARAM ERROR from main.main in emo/examples/example.go:17`
 
 It prints additional information about the file and the line
 if the event is of type error
@@ -52,42 +52,50 @@ To only print the errors:
 var zone = emo.NewZone("api", false)
 ```
 
-Setting that second parameter to `false` will disable the printing for logs that are not errors.
+Setting that second parameter to `false` disables the printing for logs that are not errors.
 
-## Timestamp
-
-To add a timestamp within the event message, use the third parameter:
+This can also be later set using:
 
 ```go
-const print = false // default true
-const date  = true  // default false
-var zone = emo.NewZone("api", print, date)
+zone.SetVerbosity(false) // only print when isError
+zone.SetVerbosity(true)  // always print any event (except Trace events)
+zone.SetVerbosity()      // revert to default: inherit the global settings
 ```
 
-## Color
-
-The event message is by default colorized.
-But in some cases this is disturbing, especially when testing.
-To disable the color, use the fourth parameter:
+To change all zones at once:
 
 ```go
-const print = false // default true
-const date  = true  // default false
-const color = false // default true
-var zone = emo.NewZone("api", print, date, color)
+emo.GlobalVerbosity(false) // verbose mode for all zones inheriting the global settings
+emo.GlobalVerbosity(true)  // only isError for all zones inheriting the global settings
 ```
 
 ## Call stack info
 
-By default emo prints the call stack info only when `isError` and print is enabled.
-To always print it, or to never print it, use the fifth parameter:
+By default emo prints the call-stack info only when `isError` and in verbose mode.
+The call-stack info contains the caller function, the source file, and line number.
+
+To always print it, or to never print it, use the third parameter:
 
 ```go
-const print = false // default true
-const date  = true  // default false
-const color = false // default true
-const stack = false // default auto
-var zone = emo.NewZone("api", print, date, color, stack)
+const verbose = false // default true
+const stack = true    // default auto = only when isError
+var zone = emo.NewZone("api", verbose, stack)
+```
+
+This can also be later set using a similar function as for `zone.SetVerbosity()`:
+
+```go
+zone.SetStackInfo(true)  // print the call-stack info for all events
+zone.SetStackInfo(false) // never print the call-stack info for any event
+zone.SetStackInfo()      // inherits from global settings
+```
+
+To control the call-stack info for all zones:
+
+```go
+emo.GlobalStackInfo(true)  // print the call-stack info for the zones inheriting global settings
+emo.GlobalStackInfo(false) // never print the call-stack for the zones inheriting global settings
+emo.GlobalStackInfo()      // default: only when `isError` and in verbose mode
 ```
 
 ## Hooks
@@ -102,6 +110,64 @@ func hook(evt emo.Event) {
 
 zone := emo.NewZoneWithHook("example", hook)
 zone.Debug("Test msg")
+```
+
+## Force printing an event
+
+Sometimes, an non-error event should be still printed, even when the `Zone` is configured with `Zone.Verbose=false`.
+In that case, the `P()` helper function can be used:
+
+```go
+var prod  = true
+var print = !prod
+var zone  = emo.NewZone("api", print)
+
+func start() {
+    zone.P().Info("Starting...")
+    // ...
+}
+```
+
+The `P(bool)` function accept an optional parameter to explicitly enable/disable the printing of this event:
+
+```go
+func foo(n int) error {
+    if n < 0 {
+        return zone.P(false).ParamError("Parameter n must be positive, but got:", n).Err()
+    }
+    return nil
+}
+```
+
+## Force printing the call stack info
+
+Similarly to `P()`, the `S()` helper function controls the call stack info of the current event:
+
+```go
+zone.S().Debug("v=", v)     // always print the call stack info
+zone.S(-1).Error("v=", v)   // never print the call stack info
+zone.S(0).Error("v=", v)    // only when zone.Print=true (default mode)
+zone.S(2).Error("v=", v)    // always print, but use the caller layer one level up
+```
+
+## Timestamp
+
+To timestamp all event messages:
+
+```go
+emo.GlobalTimestamp(true)
+```
+
+By default, `emo` does not timestamp the events.
+
+## Color
+
+The event messages are by default colorized.
+But in some cases this is disturbing, especially when testing.
+To disable the color:
+
+```go
+emo.GlobalColoring(false)
 ```
 
 ## `Event`
@@ -139,40 +205,54 @@ func foo(n int) error {
 }
 ```
 
-## Force printing an event
+## Global zone
 
-Sometimes, an non-error event should be still printed, even when the `Zone` is configured with `Zone.PrintAll=false`.
-In that case, the `P()` helper function can be used:
+All the `emo` functions can be used without having to create a custom `Zone`.
+The `emo.DefaultZone` is a pre-configured `Zone` ready to use:
 
 ```go
-var prod  = true
-var print = !prod
-var zone  = emo.NewZone("api", print)
-
-func start() {
-    zone.P().Info("Starting...")
-    // ...
-}
+var zone = emo.DefaultZone
+var ok = true
+zone.Info("my event", ok)
 ```
 
-The `P(bool)` function accept an optional parameter to explicitly enable/disable the printing of this event:
+## _Printf_ format
+
+The Go implementation of `emo` enables the _Printf_ format. Each function has a corresponding function ending with `f`:
 
 ```go
-func foo(n int) error {
-    if n < 0 {
-        return zone.P(false).ParamError("Parameter n must be positive, but got:", n).Err()
-    }
-    return nil
-}
+zone.Info("my event", ok)
+zone.Infof("my event %v", ok)
 ```
 
-## Force printing the call stack info
+## Compatibility with the standard Go logger
 
-Similarly to `P()`, the `S()` helper function controls the call stack info of the current event:
+To use `emo` as a logger the Go implementation of `emo` also implements the standard Go logger functions:
 
 ```go
-zone.S().Debug("v=", v)     // always print the call stack info
-zone.S(-1).Error("v=", v)   // never print the call stack info
-zone.S(0).Error("v=", v)    // only when zone.Print=true (default mode)
-zone.S(2).Error("v=", v)    // always print, but use the caller layer one level up
+zone.Print("my event", ok)       // not an error but always printed
+zone.Printf("my event %v", ok)
+zone.Fatal("my event", ok)       // not an error but always printed
+zone.Fatalf("my event %v", ok)
+zone.Panic("my event", ok)       // not an error but always printed
+zone.Panicf("my event %v", ok)
+zone.Default()
+```
+
+Moreover, the Go implementation of `emo` also implements some of other common functions of loggers like `logrus`:
+
+```go
+zone.Trace("my event", ok)       // not an error but always printed
+zone.Tracef("my event %v", ok)
+zone.Warn("my event", ok)       // not an error but always printed
+zone.Warnf("my event %v", ok)
+```
+
+## Enable tracing
+
+The `Trace` events can be very verbose.
+Thus a specific function controls its enabling:
+
+```go
+emo.GlobalTracing(true)
 ```
