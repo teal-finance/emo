@@ -80,7 +80,7 @@ func (zone Zone) S(skip ...int) Zone {
 	return zone
 }
 
-func (zone Zone) NewEvent(emoji string, isError bool, args []any) Event {
+func (zone Zone) NewEvent(emoji string, isError bool, args ...any) Event {
 	e := Event{
 		Zone:    zone,
 		Emoji:   emoji,
