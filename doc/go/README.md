@@ -26,7 +26,7 @@ Output:
 
 ## Errors
 
-Create an event of error type:
+Create an error event:
 
 ```go
 import errors
@@ -98,20 +98,6 @@ emo.GlobalStackInfo(false) // never print the call-stack for the zones inheritin
 emo.GlobalStackInfo()      // default: only when `isError` and in verbose mode
 ```
 
-## Hooks
-
-A callback can be passed to a zone.
-It will be executed each time an event is fired:
-
-```go
-func hook(evt emo.Event) {
-    fmt.Println("Event hook", evt.Error)
-}
-
-zone := emo.NewZoneWithHook("example", hook)
-zone.Debug("Test msg")
-```
-
 ## Force printing an event
 
 Sometimes, an non-error event should be still printed, even when the `Zone` is configured with `Zone.Verbose=false`.
@@ -119,8 +105,8 @@ In that case, the `P()` helper function can be used:
 
 ```go
 var prod  = true
-var print = !prod
-var zone  = emo.NewZone("api", print)
+var verbose = !prod
+var zone  = emo.NewZone("api", verbose)
 
 func start() {
     zone.P().Info("Starting...")
@@ -128,7 +114,7 @@ func start() {
 }
 ```
 
-The `P(bool)` function accept an optional parameter to explicitly enable/disable the printing of this event:
+The `P(bool)` function accept an optional parameter to explicitly enable/disable the printing of an event:
 
 ```go
 func foo(n int) error {
@@ -144,10 +130,11 @@ func foo(n int) error {
 Similarly to `P()`, the `S()` helper function controls the call stack info of the current event:
 
 ```go
-zone.S().Debug("v=", v)     // always print the call stack info
+zone.S().Debug("v=", v)     // always print the call stack info, like S(1)
 zone.S(-1).Error("v=", v)   // never print the call stack info
-zone.S(0).Error("v=", v)    // only when zone.Print=true (default mode)
-zone.S(2).Error("v=", v)    // always print, but use the caller layer one level up
+zone.S(0).Error("v=", v)    // inherits the global settings, usually print when zone.Print=true (default)
+zone.S(1).Error("v=", v)    // always print the call stack info, like S()
+zone.S(2).Error("v=", v)    // always print, but use the caller layer at one level up
 ```
 
 ## Timestamp
@@ -170,6 +157,21 @@ To disable the color:
 emo.GlobalColoring(false)
 ```
 
+## Convert an `Event` to a Go standard error
+
+Sometimes a function needs to print an error and to return this same string as a Go standard error.
+In that case, the function `Err()` converts an `Event` to a Go standard error:
+
+```go
+func foo(n int) error {
+    if n < 0 {
+        evt := zone.ParamError("Parameter n must be positive, but got:", n)
+        return evt.Err()
+    }
+    return nil
+}
+```
+
 ## `Event`
 
 Exported fields of an `Event`:
@@ -190,19 +192,19 @@ Note: The fields `From`, `File` and `Line`
 are always computed when the `zone.Hook` is set,
 even is `stack=false` is set.
 
-## Convert an `Event` to a Go standard error
 
-Sometimes a function needs to print an error and to return this same string as a Go standard error.
-In that case, the function `Err()` converts an `Event` to a Go standard error:
+## Hooks
+
+A callback can be passed to a zone.
+It will be executed each time an event is fired:
 
 ```go
-func foo(n int) error {
-    if n < 0 {
-        evt := zone.ParamError("Parameter n must be positive, but got:", n)
-        return evt.Err()
-    }
-    return nil
+func hook(evt emo.Event) {
+    fmt.Println("Event hook", evt.Error)
 }
+
+zone := emo.NewZoneWithHook("example", hook)
+zone.Debug("Test msg")
 ```
 
 ## Global zone
