@@ -126,7 +126,7 @@ even is `stack=false` is set.
 
 ## Convert an `Event` to a Go standard error
 
-Often the need is to print an error and to return it as a Go standard error.
+Sometimes a function needs to print an error and to return this same string as a Go standard error.
 In that case, the function `Err()` converts an `Event` to a Go standard error:
 
 ```go
@@ -141,7 +141,7 @@ func foo(n int) error {
 
 ## Force printing an event
 
-Sometimes, an non-error event should be still printed, even when the `Zone` is configured with `Zone.Print=false`.
+Sometimes, an non-error event should be still printed, even when the `Zone` is configured with `Zone.PrintAll=false`.
 In that case, the `P()` helper function can be used:
 
 ```go

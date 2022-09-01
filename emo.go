@@ -20,12 +20,12 @@ func ObjectInfo(args ...any) {
 
 // Zone : base emo zone.
 type Zone struct {
-	Name  string
-	Print bool      // true => always print ; false => print only when isError
-	Date  bool      // true => prefix the log with the current timestamp
-	Color bool      // true => print colors (use color=false for testing)
-	Skip  StackEnum // StackNo => never print the call stack info, StackAuto => only when Print=true and isError
-	Hook  func(Event)
+	Name       string
+	PrintAll   bool      // true => always print ; false => print only when isError
+	InsertDate bool      // true => prefix the log with the current timestamp
+	Colorize   bool      // true => print colors (use color=false for testing)
+	StackSkip  StackEnum // StackNo => never print the call stack info, StackAuto => only when PrintAll=true and isError
+	Hook       func(Event)
 }
 
 type StackEnum int
@@ -43,7 +43,7 @@ const (
 // - print=false => print only when isError, default is true
 // - date=true => prefix the log with the current timestamp, default is false
 // - color=true => print colors (use color=false for testing), default is true
-// - stack=absent (default) => print the call stack info when Print=true and isError, true => always, false => never
+// - stack=absent (default) => print the call stack info when PrintAll=true and isError, true => always, false => never
 func NewZone(name string, args ...bool) Zone {
 	return NewLoggerWithHook(name, nil, args...)
 }
@@ -52,20 +52,20 @@ func NewZone(name string, args ...bool) Zone {
 func NewLoggerWithHook(name string, hook func(Event), args ...bool) Zone {
 	print, date, color, stack := optional(args)
 	return Zone{
-		Name:  name,
-		Print: print,
-		Date:  date,
-		Color: color,
-		Skip:  stack,
-		Hook:  hook,
+		Name:       name,
+		Hook:       hook,
+		PrintAll:   print,
+		InsertDate: date,
+		Colorize:   color,
+		StackSkip:  stack,
 	}
 }
 
 // P forces the log to be printed, even when zone.Pint=false.
 func (zone Zone) P(print ...bool) Zone {
-	zone.Print = true
+	zone.PrintAll = true
 	if len(print) > 0 {
-		zone.Print = print[0]
+		zone.PrintAll = print[0]
 	}
 	return zone
 }
@@ -73,9 +73,9 @@ func (zone Zone) P(print ...bool) Zone {
 // S forces the print of the call stack info (caller function and file:line).
 // The optional parameter allows to select the position within the stack.
 func (zone Zone) S(skip ...int) Zone {
-	zone.Skip = StackYes
+	zone.StackSkip = StackYes
 	if len(skip) > 0 {
-		zone.Skip = StackEnum(skip[0])
+		zone.StackSkip = StackEnum(skip[0])
 	}
 	return zone
 }
@@ -91,7 +91,7 @@ func (zone Zone) NewEvent(emoji string, isError bool, args ...any) Event {
 		Line:    0,
 	}
 
-	if (zone.Skip >= StackYes) || (zone.Skip == StackAuto && e.IsError && zone.Print) {
+	if (zone.StackSkip >= StackYes) || (zone.StackSkip == StackAuto && e.IsError && zone.PrintAll) {
 		e = e.Stack(4)
 	}
 
@@ -111,9 +111,9 @@ type Event struct {
 }
 
 func (e Event) Print() Event {
-	if e.IsError || e.Zone.Print {
+	if e.IsError || e.Zone.PrintAll {
 		m := e.Message()
-		if e.Zone.Date {
+		if e.Zone.InsertDate {
 			log.Print(m)
 		} else {
 			fmt.Println(m)
@@ -171,13 +171,13 @@ func (e Event) CallHook() Event {
 }
 
 // Stack extracts info from the the call stack info
-// (caller function, file and line number)
-// in order to print it later.
+// (caller function, file and line number).
+// Then the event may be printed later.
 // The optional parameter allows to change the position within the call stack.
 func (e Event) Stack(level ...int) Event {
 	// do not compute again the runtime functions if already done
 	if e.From == "" {
-		skip := int(e.Zone.Skip)
+		skip := int(e.Zone.StackSkip)
 		if len(level) > 0 {
 			skip += level[0]
 		}
@@ -214,28 +214,28 @@ func optional(args []bool) (print, date, color bool, stack StackEnum) {
 }
 
 func (zone Zone) red(s string) string {
-	if zone.Color {
+	if zone.Colorize {
 		return color.Red(s)
 	}
 	return s
 }
 
 func (zone Zone) yellow(s string) string {
-	if zone.Color {
+	if zone.Colorize {
 		return color.Yellow(s)
 	}
 	return s
 }
 
 func (zone Zone) bold(s string) string {
-	if zone.Color {
+	if zone.Colorize {
 		return color.BoldWhite(s)
 	}
 	return s
 }
 
 func (zone Zone) white(s string) string {
-	if zone.Color {
+	if zone.Colorize {
 		return color.White(s)
 	}
 	return s

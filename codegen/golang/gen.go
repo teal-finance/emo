@@ -45,7 +45,7 @@ func (zone Zone) ` + name + `(args ...any) Event {
 
 	return `
 func (zone Zone) ` + name + `(args ...any) Event {
-	if zone.Print || (zone.Hook != nil) {
+	if zone.PrintAll || (zone.Hook != nil) {
 		return zone.NewEvent("` + emoji + `", ` + strconv.FormatBool(isError) + `, args...).Print().CallHook()
 	}
 	var evt Event
