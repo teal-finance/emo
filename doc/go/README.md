@@ -1,28 +1,28 @@
 # Emo Go library
 
-Emoji based semantic scoped debuging for Go
+Emoji based logger for Go
 
 ## Usage
 
-Declare a debug zone in a package:
+Declare the emo logger in a package:
 
 ```go
 import (
-  emolib "github.com/teal-finance/emo"
+  "github.com/teal-finance/emo"
 )
 
-var emo = emolib.NewZone("testzone")
+var log = emo.NewLogger("myLib")
 ```
 
-Create an event for this zone:
+Log an info. message:
 
 ```go
-emo.Info("An info message")
+log.Info("An info message")
 ```
 
 Output:
 
-> [testzone] ℹ️  infomsg
+> [myLib] ℹ️  An info message
 
 ### Errors
 
@@ -32,40 +32,40 @@ Create an event of error type:
 import errors
 
 err := errors.New("PARAM ERROR")
-emo.Error("This is an error message", err)
+log.Error("An error has occurred:", err)
 ```
 
 Output:
 
-> [testzone] Error 📥  This is a parameter error message PARAM ERROR from main.main in emo/examples/example.go:17
+> [myLib] Error 📥  An error has occurred: PARAM ERROR from main.main in emo/examples/example.go:17
 
-It prints additionnal information about the file and the line if the event is
-of type error
+It prints additional information about the file and the line
+if the event is of type error
 
 See the complete [events list](../events/README.md)
 
-### Enable or disable a zone
+### Enable or disable a logger
 
-To disable events printing for a zone:
+To log only the errors:
 
 ```go
-var emo = emolib.NewZone("api", false)
+var log = emo.NewLogger("api", false)
 ```
 
-Setting the second parameter to `false` will disable the printing for this zone
+Setting the second parameter to `false` will disable the printing for logs that are not errors.
 
 ### Hooks
 
-A callback can be passed to a zone. It will be executed each time an event
-is fired:
+A callback can be passed to a logger.
+It will be executed each time an event is fired:
 
 ```go
 func hook(evt emo.Event) {
   fmt.Println("Event hook", evt.Error)
 }
 
-em := emo.NewZoneWithHook("example", hook)
-em.Debug("Test msg")
+log := emo.NewLoggerWithHook("example", hook)
+log.Debug("Test msg")
 ```
 
 Structure of an `Event`:
@@ -76,7 +76,7 @@ type Event struct {
   Emoji   string
   From    string
   File    string
-  Zone    Zone
+  Log     Logger
   Line    int
   IsError bool
 }

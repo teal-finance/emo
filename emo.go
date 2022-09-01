@@ -10,8 +10,8 @@ import (
 	color "github.com/acmacalister/skittles"
 )
 
-// Zone : base emo zone.
-type Zone struct {
+// Logger : base emo logger.
+type Logger struct {
 	Name  string
 	Print bool
 	Hook  func(Event)
@@ -23,30 +23,30 @@ type Event struct {
 	Emoji   string
 	From    string
 	File    string
-	Zone    Zone
+	Log     Logger
 	Line    int
 	IsError bool
 }
 
-// NewZone : create a logger.
-func NewZone(name string, print ...bool) Zone {
+// NewLogger : create a logger.
+func NewLogger(name string, print ...bool) Logger {
 	p := true
 	if len(print) > 0 {
 		p = print[0]
 	}
-	return Zone{
+	return Logger{
 		Name:  name,
 		Print: p,
 	}
 }
 
-// NewZoneWithHook : create a zone constructor with a hook
-func NewZoneWithHook(name string, hook func(Event), print ...bool) Zone {
+// NewLoggerWithHook : create a Logger with a function hook
+func NewLoggerWithHook(name string, hook func(Event), print ...bool) Logger {
 	p := true
 	if len(print) > 0 {
 		p = print[0]
 	}
-	return Zone{
+	return Logger{
 		Name:  name,
 		Print: p,
 		Hook:  hook,
@@ -61,28 +61,28 @@ func ObjectInfo(args ...any) {
 	}
 }
 
-func processEvent(emoji string, zone Zone, isError bool, args []any) Event {
-	event := newEvent(emoji, zone, isError, args)
+func processEvent(emoji string, l Logger, isError bool, args []any) Event {
+	event := newEvent(emoji, l, isError, args)
 
-	if isError || zone.Print {
+	if isError || l.Print {
 		fmt.Println(event.message())
 	}
 
-	if zone.Hook != nil {
-		zone.Hook(event)
+	if l.Hook != nil {
+		l.Hook(event)
 	}
 
 	return event
 }
 
-func newEvent(emoji string, zone Zone, isError bool, args []any) Event {
+func newEvent(emoji string, l Logger, isError bool, args []any) Event {
 	pc := make([]uintptr, 1)
 	runtime.Callers(4, pc)
 	f := runtime.FuncForPC(pc[0])
 	file, line := f.FileLine(pc[0])
 
 	return Event{
-		Zone:    zone,
+		Log:     l,
 		Emoji:   emoji,
 		IsError: isError,
 		Error:   concatenateErrors(args),
@@ -107,8 +107,8 @@ func concatenateErrors(args []any) error {
 
 func (event Event) message() string {
 	msg := ""
-	if event.Zone.Name != "" {
-		msg += "[" + color.Yellow(event.Zone.Name) + "] "
+	if event.Log.Name != "" {
+		msg += "[" + color.Yellow(event.Log.Name) + "] "
 	}
 
 	if event.IsError {
@@ -117,7 +117,7 @@ func (event Event) message() string {
 
 	msg += event.Emoji + "  " + event.Error.Error()
 
-	if event.IsError && event.Zone.Print {
+	if event.IsError && event.Log.Print {
 		msg += " from " + color.BoldWhite(event.From) +
 			" in " + event.File + ":" +
 			color.White(strconv.Itoa(event.Line))

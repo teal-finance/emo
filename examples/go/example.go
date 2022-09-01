@@ -11,6 +11,6 @@ func hook(evt emo.Event) {
 }
 
 func main() {
-	em := emo.NewZoneWithHook("example", hook)
-	em.Info("Test info")
+	log := emo.NewLoggerWithHook("example", hook)
+	log.Info("Test info")
 }

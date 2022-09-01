@@ -3,7 +3,7 @@ package emo
 import "testing"
 
 func TestBaseEmo(t *testing.T) {
-	em := NewZone("testzone")
+	em := NewLogger("testLogger")
 	evt := em.Info("infomsg")
 	if evt.Error.Error() != "infomsg" {
 		t.Fatal(evt.Error.Error(), "!=", "infomsg")
@@ -11,7 +11,7 @@ func TestBaseEmo(t *testing.T) {
 }
 
 func TestEmoTypes(t *testing.T) {
-	em := NewZone("testzone")
+	em := NewLogger("testLogger")
 	evt := em.Info("infomsg")
 	if evt.Emoji != "ℹ️" {
 		t.Fatal(evt.Emoji, "!=", "ℹ️")
