@@ -350,7 +350,7 @@ func (zone Zone) stackInfoToBeAppended(isError bool) bool {
 		return true
 	}
 	if DefaultZone.StackInfo <= No {
-		return isError
+		return isError && zone.toBePrinted(isError)
 	}
 	return false
 }
