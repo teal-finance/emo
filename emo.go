@@ -178,7 +178,7 @@ func NewEvent(emoji string, zone Zone, isError bool, args []any) Event {
 
 func (e Event) Print() Event {
 	if e.IsError || e.Zone.Print {
-		m := e.message()
+		m := e.Message()
 		if e.Zone.Date {
 			log.Print(m)
 		} else {
@@ -196,7 +196,7 @@ func (e Event) CallHook() Event {
 	return e
 }
 
-func (e Event) message() string {
+func (e Event) Message() string {
 	msg := ""
 	if e.Zone.Name != "" {
 		msg += "[" + e.Zone.yellow(e.Zone.Name) + "] "
