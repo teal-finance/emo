@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"log"
+	"fmt"
 
 	"github.com/teal-finance/emo/codegen/core"
 	"github.com/teal-finance/emo/codegen/dart"
@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	log.Print("Generator of emo source code")
+	fmt.Println("[codegen] Generator of emo source code")
 
 	dartf := flag.Bool("dart", false, "generate Dart code")
 	docf := flag.Bool("doc", false, "generate the documentation")
@@ -25,33 +25,33 @@ func main() {
 	hasFlag := *dartf || *docf || *gof || *pyf || *tsf
 	enableAll := !hasFlag
 	if enableAll {
-		log.Print("No flag => generate code for all languages")
+		fmt.Println("[codegen] No flag => generate code for all languages")
 	}
 
 	ref := core.GetRef()
 
 	if enableAll || *dartf {
-		log.Print("Generating Dart code")
+		fmt.Println("[codegen] Generating Dart code")
 		dart.GenCode(ref)
 	}
 
 	if enableAll || *docf {
-		log.Print("Generating documentation")
+		fmt.Println("[codegen] Generating documentation")
 		doc.GenDoc(ref)
 	}
 
 	if enableAll || *gof {
-		log.Print("Generating Go code")
+		fmt.Println("[codegen] Generating Go code")
 		golang.GenGo(ref)
 	}
 
 	if enableAll || *pyf {
-		log.Print("Generating Python code")
+		fmt.Println("[codegen] Generating Python code")
 		py.GenPy(ref)
 	}
 
 	if enableAll || *tsf {
-		log.Print("Generating Typescript code")
+		fmt.Println("[codegen] Generating Typescript code")
 		ts.GenTs(ref)
 	}
 }

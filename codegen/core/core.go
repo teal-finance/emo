@@ -2,6 +2,7 @@ package core
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -21,7 +22,7 @@ func GetRef() []Ref {
 	if err != nil {
 		log.Panic(err)
 	}
-	log.Print("Open referential: ", fn)
+	fmt.Println("[codegen] Open referential: ", fn)
 
 	b, err := os.ReadFile(fn)
 	if err != nil {
@@ -53,7 +54,7 @@ func Write(fn, code string) {
 		log.Panic(err)
 	}
 
-	log.Printf("File: %s (%d bytes)", fn, n)
+	fmt.Printf("[codegen] File: %s (%d bytes)"+"\n", fn, n)
 }
 
 func Uncapitalized(s string) string {

@@ -31,7 +31,7 @@ func GenGo(ref []core.Ref) {
 		log.Fatal(err)
 	}
 
-	log.Print("File: " + fn)
+	fmt.Println("[codegen] File: " + fn)
 }
 
 func genFunc(name, emoji string, isError bool) string {
