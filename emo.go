@@ -1,8 +1,8 @@
 package emo
 
 import (
-	"errors"
 	"fmt"
+	"log"
 	"runtime"
 	"strconv"
 	"strings"
@@ -17,15 +17,15 @@ type Logger struct {
 	Hook  func(Event)
 }
 
-// Event : base emo event.
-type Event struct {
-	Error   error
+// Error : base emo event.
+type Error struct {
 	Emoji   string
+	Log     Logger
+	IsError bool
+	Args    []any
 	From    string
 	File    string
-	Log     Logger
 	Line    int
-	IsError bool
 }
 
 // NewLogger : create a logger.
@@ -57,71 +57,68 @@ func NewLoggerWithHook(name string, hook func(Event), print ...bool) Logger {
 func ObjectInfo(args ...any) {
 	msg := "[" + color.Yellow("object info") + "] "
 	for _, a := range args {
-		fmt.Println(msg+"Type: %T Value: %#v", a, a)
+		log.Print(msg+"Type: %T Value: %#v", a, a)
 	}
 }
 
-func processEvent(emoji string, l Logger, isError bool, args []any) Event {
-	event := newEvent(emoji, l, isError, args)
+func processEvent(emoji string, l Logger, isError bool, args []any) Error {
+	e := newError(emoji, l, isError, args)
 
 	if isError || l.Print {
-		fmt.Println(event.message())
+		log.Print(e.message())
 	}
 
 	if l.Hook != nil {
-		l.Hook(event)
+		l.Hook(e)
 	}
 
-	return event
+	return e
 }
 
-func newEvent(emoji string, l Logger, isError bool, args []any) Event {
+func newError(emoji string, l Logger, isError bool, args []any) Error {
 	pc := make([]uintptr, 1)
 	runtime.Callers(4, pc)
 	f := runtime.FuncForPC(pc[0])
 	file, line := f.FileLine(pc[0])
 
-	return Event{
+	return Error{
 		Log:     l,
 		Emoji:   emoji,
 		IsError: isError,
-		Error:   concatenateErrors(args),
+		Args:    args,
 		From:    f.Name(),
 		File:    file,
 		Line:    line,
 	}
 }
 
-func concatenateErrors(args []any) error {
-	texts := []string{}
+func (e Error) Error() string {
+	text := make([]string, 0, len(e.Args))
+	for _, a := range e.Args {
+		text = append(text, fmt.Sprintf("%v", a))
+	}
+	str := strings.Join(text, " ")
 
-	for _, a := range args {
-		str := fmt.Sprintf("%v", a)
-		texts = append(texts, str)
+	if e.IsError && e.Log.Print {
+		str += " from " + color.BoldWhite(e.From) +
+			" in " + e.File + ":" +
+			color.White(strconv.Itoa(e.Line))
 	}
 
-	all := strings.Join(texts, " ")
-
-	return errors.New(all)
+	return str
 }
 
-func (event Event) message() string {
+func (e Error) message() string {
 	msg := ""
-	if event.Log.Name != "" {
-		msg += "[" + color.Yellow(event.Log.Name) + "] "
+	if e.Log.Name != "" {
+		msg += "[" + color.Yellow(e.Log.Name) + "] "
 	}
 
-	if event.IsError {
+	if e.IsError {
 		msg += color.Red("Error") + " "
 	}
 
-	msg += event.Emoji + "  " + event.Error.Error()
-
-	if event.IsError && event.Log.Print {
-		msg += " from " + color.BoldWhite(event.From) +
-			" in " + event.File + ":" +
-			color.White(strconv.Itoa(event.Line))
-	}
+	msg += e.Emoji + "  " + e.Error()
 
 	return msg
 }

@@ -3,17 +3,17 @@ package emo
 import "testing"
 
 func TestBaseEmo(t *testing.T) {
-	em := NewLogger("testLogger")
-	evt := em.Info("infomsg")
-	if evt.Error.Error() != "infomsg" {
-		t.Fatal(evt.Error.Error(), "!=", "infomsg")
+	log := NewLogger("testLogger")
+	err := log.Info("infomsg")
+	if err.Error() != "infomsg" {
+		t.Fatal(err.Error(), "!=", "infomsg")
 	}
 }
 
 func TestEmoTypes(t *testing.T) {
-	em := NewLogger("testLogger")
-	evt := em.Info("infomsg")
-	if evt.Emoji != "ℹ️" {
-		t.Fatal(evt.Emoji, "!=", "ℹ️")
+	log := NewLogger("testLogger")
+	err := log.Info("infomsg")
+	if err.Emoji != "ℹ️" {
+		t.Fatal(err.Emoji, "!=", "ℹ️")
 	}
 }
