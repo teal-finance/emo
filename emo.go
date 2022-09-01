@@ -80,6 +80,24 @@ func (zone Zone) S(skip ...int) Zone {
 	return zone
 }
 
+func (zone Zone) NewEvent(emoji string, isError bool, args []any) Event {
+	e := Event{
+		Zone:    zone,
+		Emoji:   emoji,
+		IsError: isError,
+		Args:    args,
+		From:    "",
+		File:    "",
+		Line:    0,
+	}
+
+	if (zone.Skip >= StackYes) || (zone.Skip == StackAuto && e.IsError && zone.Print) {
+		e = e.Stack(4)
+	}
+
+	return e
+}
+
 // Event : base emo event.
 type Event struct {
 	Emoji   string
@@ -90,6 +108,40 @@ type Event struct {
 	File    string
 	Line    int
 	cache   string
+}
+
+func (e Event) Print() Event {
+	if e.IsError || e.Zone.Print {
+		m := e.Message()
+		if e.Zone.Date {
+			log.Print(m)
+		} else {
+			fmt.Println(m)
+		}
+	}
+	return e
+}
+
+func (e Event) Message() string {
+	msg := ""
+	if e.Zone.Name != "" {
+		msg += "[" + e.Zone.yellow(e.Zone.Name) + "] "
+	}
+
+	msg += e.Emoji
+
+	if e.IsError {
+		msg += " " + e.Zone.red("ERROR")
+	}
+
+	msg += "  " + e.Error()
+
+	return msg
+}
+
+// Err converts an Event to a standard Go error.
+func (e Event) Err() error {
+	return &e
 }
 
 // Error is the implementation of the error interface.
@@ -108,6 +160,14 @@ func (e *Event) Error() string {
 		}
 	}
 	return e.cache
+}
+
+func (e Event) CallHook() Event {
+	if e.Zone.Hook != nil {
+		e = e.Stack()
+		e.Zone.Hook(e)
+	}
+	return e
 }
 
 // Stack extracts info from the the call stack info
@@ -131,11 +191,6 @@ func (e Event) Stack(level ...int) Event {
 	return e
 }
 
-// Err converts an Event to a standard Go error.
-func (e Event) Err() error {
-	return &e
-}
-
 func optional(args []bool) (print, date, color bool, stack StackEnum) {
 	// default values
 	print, date, color, stack = true, false, true, StackAuto
@@ -156,61 +211,6 @@ func optional(args []bool) (print, date, color bool, stack StackEnum) {
 		}
 		return args[0], args[1], args[2], stack
 	}
-}
-
-func NewEvent(emoji string, zone Zone, isError bool, args []any) Event {
-	e := Event{
-		Zone:    zone,
-		Emoji:   emoji,
-		IsError: isError,
-		Args:    args,
-		From:    "",
-		File:    "",
-		Line:    0,
-	}
-
-	if (zone.Skip >= StackYes) || (zone.Skip == StackAuto && e.IsError && zone.Print) {
-		e = e.Stack(4)
-	}
-
-	return e
-}
-
-func (e Event) Print() Event {
-	if e.IsError || e.Zone.Print {
-		m := e.Message()
-		if e.Zone.Date {
-			log.Print(m)
-		} else {
-			fmt.Println(m)
-		}
-	}
-	return e
-}
-
-func (e Event) CallHook() Event {
-	if e.Zone.Hook != nil {
-		e = e.Stack()
-		e.Zone.Hook(e)
-	}
-	return e
-}
-
-func (e Event) Message() string {
-	msg := ""
-	if e.Zone.Name != "" {
-		msg += "[" + e.Zone.yellow(e.Zone.Name) + "] "
-	}
-
-	msg += e.Emoji
-
-	if e.IsError {
-		msg += " " + e.Zone.red("ERROR")
-	}
-
-	msg += "  " + e.Error()
-
-	return msg
 }
 
 func (zone Zone) red(s string) string {
