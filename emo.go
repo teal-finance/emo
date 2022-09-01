@@ -27,6 +27,7 @@ type Error struct {
 	From    string
 	File    string
 	Line    int
+	cache   string
 }
 
 // NewLogger : create a logger.
@@ -84,20 +85,21 @@ func newError(emoji string, l Logger, isError bool, args []any) Error {
 	}
 }
 
-func (e Error) Error() string {
-	text := make([]string, 0, len(e.Args))
-	for _, a := range e.Args {
-		text = append(text, fmt.Sprintf("%v", a))
-	}
-	str := strings.Join(text, " ")
+func (e *Error) Error() string {
+	if e.cache == "" {
+		text := make([]string, 0, len(e.Args))
+		for _, a := range e.Args {
+			text = append(text, fmt.Sprintf("%v", a))
+		}
+		e.cache = strings.Join(text, " ")
 
-	if e.IsError && e.Log.Print {
-		str += " from " + e.Log.bold(e.From) +
-			" in " + e.File + ":" +
-			e.Log.white(strconv.Itoa(e.Line))
+		if e.IsError && e.Log.Print {
+			e.cache += " from " + e.Log.bold(e.From) +
+				" in " + e.File + ":" +
+				e.Log.white(strconv.Itoa(e.Line))
+		}
 	}
-
-	return str
+	return e.cache
 }
 
 func (e Error) message() string {
