@@ -1,23 +1,23 @@
 # Emo Go library
 
-Emoji based logger for Go
+Emoji based semantic scoped debuging for Go
 
 ## Usage
 
-Declare the emo logger in a package:
+Declare a debug zone in a package:
 
 ```go
 import (
   "github.com/teal-finance/emo"
 )
 
-var log = emo.NewLogger("myLib")
+var zone = emo.NewLogger("myLib")
 ```
 
-Log an info. message:
+Create an event for this zone:
 
 ```go
-log.Info("An info message")
+zone.Info("An info message")
 ```
 
 Output:
@@ -32,7 +32,7 @@ Create an event of error type:
 import errors
 
 err := errors.New("PARAM ERROR")
-log.Error("An error has occurred:", err)
+zone.Error("An error has occurred:", err)
 ```
 
 Output:
@@ -44,19 +44,19 @@ if the event is of type error
 
 See the complete [events list](../events/README.md)
 
-### Enable or disable a logger
+### Enable or disable a zone
 
-To log only the errors:
+To only print the errors:
 
 ```go
-var log = emo.NewLogger("api", false)
+var zone = emo.NewLogger("api", false)
 ```
 
 Setting the second parameter to `false` will disable the printing for logs that are not errors.
 
 ### Hooks
 
-A callback can be passed to a logger.
+A callback can be passed to a zone.
 It will be executed each time an event is fired:
 
 ```go
@@ -64,8 +64,8 @@ func hook(evt emo.Event) {
   fmt.Println("Event hook", evt.Error)
 }
 
-log := emo.NewLoggerWithHook("example", hook)
-log.Debug("Test msg")
+zone := emo.NewLoggerWithHook("example", hook)
+zone.Debug("Test msg")
 ```
 
 Structure of an `Event`:
@@ -76,7 +76,7 @@ type Event struct {
   Emoji   string
   From    string
   File    string
-  Log     Logger
+  Log     Zone
   Line    int
   IsError bool
 }

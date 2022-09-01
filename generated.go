@@ -2,313 +2,313 @@
 
 package emo
 
-func (l Logger) Info(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("ℹ️", l, false, args)
+func (zone Zone) Info(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("ℹ️", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Warning(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("🔔", l, false, args)
+func (zone Zone) Warning(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("🔔", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Error(args ...any) Event {
-	return processEvent("💢", l, true, args)
+func (zone Zone) Error(args ...any) Event {
+	return new("💢", zone, true, args).print().callHook()
 }
 
-func (l Logger) Query(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("🗄️", l, false, args)
+func (zone Zone) Query(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("🗄️", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) QueryError(args ...any) Event {
-	return processEvent("🗄️", l, true, args)
+func (zone Zone) QueryError(args ...any) Event {
+	return new("🗄️", zone, true, args).print().callHook()
 }
 
-func (l Logger) Encrypt(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("🎼", l, false, args)
+func (zone Zone) Encrypt(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("🎼", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) EncryptError(args ...any) Event {
-	return processEvent("🎼", l, true, args)
+func (zone Zone) EncryptError(args ...any) Event {
+	return new("🎼", zone, true, args).print().callHook()
 }
 
-func (l Logger) Decrypt(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("🗝️", l, false, args)
+func (zone Zone) Decrypt(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("🗝️", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) DecryptError(args ...any) Event {
-	return processEvent("🗝️", l, true, args)
+func (zone Zone) DecryptError(args ...any) Event {
+	return new("🗝️", zone, true, args).print().callHook()
 }
 
-func (l Logger) Time(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("⏱️", l, false, args)
+func (zone Zone) Time(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("⏱️", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) TimeError(args ...any) Event {
-	return processEvent("⏱️", l, true, args)
+func (zone Zone) TimeError(args ...any) Event {
+	return new("⏱️", zone, true, args).print().callHook()
 }
 
-func (l Logger) Param(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("📩", l, false, args)
+func (zone Zone) Param(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("📩", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) ParamError(args ...any) Event {
-	return processEvent("📩", l, true, args)
+func (zone Zone) ParamError(args ...any) Event {
+	return new("📩", zone, true, args).print().callHook()
 }
 
-func (l Logger) Debug(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("💊", l, false, args)
+func (zone Zone) Debug(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("💊", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) State(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("📢", l, false, args)
+func (zone Zone) State(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("📢", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Save(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("💾", l, false, args)
+func (zone Zone) Save(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("💾", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Delete(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("❌", l, false, args)
+func (zone Zone) Delete(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("❌", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Data(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("💼", l, false, args)
+func (zone Zone) Data(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("💼", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Line(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("➖", l, false, args)
+func (zone Zone) Line(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("➖", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Init(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("🎬", l, false, args)
+func (zone Zone) Init(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("🎬", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Update(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("🆙", l, false, args)
+func (zone Zone) Update(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("🆙", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Ok(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("🆗", l, false, args)
+func (zone Zone) Ok(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("🆗", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Build(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("🔧", l, false, args)
+func (zone Zone) Build(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("🔧", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Aconstructor(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("🛠️", l, false, args)
+func (zone Zone) Aconstructor(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("🛠️", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) NotFound(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("🚫", l, false, args)
+func (zone Zone) NotFound(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("🚫", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Found(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("👁️‍🗨️", l, false, args)
+func (zone Zone) Found(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("👁️‍🗨️", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Result(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("📌", l, false, args)
+func (zone Zone) Result(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("📌", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Input(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("📥", l, false, args)
+func (zone Zone) Input(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("📥", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Output(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("📤", l, false, args)
+func (zone Zone) Output(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("📤", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Function(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("🔨", l, false, args)
+func (zone Zone) Function(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("🔨", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Key(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("🔑", l, false, args)
+func (zone Zone) Key(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("🔑", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) AccessToken(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("🔑", l, false, args)
+func (zone Zone) AccessToken(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("🔑", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) RefreshToken(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("🗝️", l, false, args)
+func (zone Zone) RefreshToken(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("🗝️", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Transmit(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("📡", l, false, args)
+func (zone Zone) Transmit(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("📡", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Start(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("🏁", l, false, args)
+func (zone Zone) Start(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("🏁", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) Stop(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("🛑", l, false, args)
+func (zone Zone) Stop(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("🛑", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) ArrowIn(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("=>", l, false, args)
+func (zone Zone) ArrowIn(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("=>", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) ArrowOut(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("<=", l, false, args)
+func (zone Zone) ArrowOut(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("<=", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) SmallArrowIn(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("->", l, false, args)
+func (zone Zone) SmallArrowIn(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("->", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) SmallArrowOut(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("<-", l, false, args)
+func (zone Zone) SmallArrowOut(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("<-", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) RequestGet(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("🔷", l, false, args)
+func (zone Zone) RequestGet(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("🔷", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt
 }
 
-func (l Logger) RequestPost(args ...any) Event {
-	if l.Print || l.Hook != nil {
-		return processEvent("🔶", l, false, args)
+func (zone Zone) RequestPost(args ...any) Event {
+	if zone.Print || (zone.Hook != nil) {
+		return new("🔶", zone, false, args).print().callHook()
 	}
 	var evt Event
 	return evt

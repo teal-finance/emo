@@ -18,60 +18,72 @@ func ObjectInfo(args ...any) {
 	}
 }
 
-// Logger : base emo logger.
-type Logger struct {
+// Zone : base emo zone.
+type Zone struct {
 	Name  string
-	Print bool
-	Color bool
-	Skip  SkipEnum
+	Print bool      // true => always print ; false => print only when isError
+	Date  bool      // true => prefix the log with the current timestamp
+	Color bool      // true => print colors (use color=false for testing)
+	Skip  StackEnum // StackNo => never print the call stack info, StackAuto => only when Print=true and isError
 	Hook  func(Event)
 }
 
-type SkipEnum int
+type StackEnum int
 
 const (
-	SkipAuto SkipEnum = 0
-	SkipNo   SkipEnum = -1
-	SkipYes  SkipEnum = 1
+	StackAuto StackEnum = 0
+	StackNo   StackEnum = -1
+	StackYes  StackEnum = 1
 )
 
-// NewLogger : create a logger.
-func NewLogger(name string, args ...bool) Logger {
+// NewZone : create a zone.
+//
+// Optional arguments are booleans:
+//
+// - print=false => print only when isError, default is true
+// - date=true => prefix the log with the current timestamp, default is false
+// - color=true => print colors (use color=false for testing), default is true
+// - skip=absent (default) => print the call stack info when Print=true and isError, true => always, false => never
+func NewZone(name string, args ...bool) Zone {
 	return NewLoggerWithHook(name, nil, args...)
 }
 
-// NewLoggerWithHook : create a Logger with a function hook
-func NewLoggerWithHook(name string, hook func(Event), args ...bool) Logger {
-	print, color, skip := optional(args)
-	return Logger{
+// NewLoggerWithHook : create a Zone with a function hook
+func NewLoggerWithHook(name string, hook func(Event), args ...bool) Zone {
+	print, date, color, skip := optional(args)
+	return Zone{
 		Name:  name,
 		Print: print,
+		Date:  date,
 		Color: color,
 		Skip:  skip,
 		Hook:  hook,
 	}
 }
 
-// S forces the print of the caller function and file:line.
+// S forces the print of the call stack info (caller function and file:line).
 // The optional parameter allows to select the position within the stack.
-func (l Logger) S(skip ...int) Logger {
-	l.Skip = SkipYes
+func (zone Zone) S(skip ...int) Zone {
+	zone.Skip = StackYes
 	if len(skip) > 0 {
-		l.Skip = SkipEnum(skip[0])
+		zone.Skip = StackEnum(skip[0])
 	}
-	return l
+	return zone
 }
 
-// S forces the log to be printed.
-func (l Logger) P() Logger {
-	l.Print = true
-	return l
+// P forces the log to be printed, even when zone.Pint=false.
+func (zone Zone) P(print ...bool) Zone {
+	zone.Print = true
+	if len(print) > 0 {
+		zone.Print = print[0]
+	}
+	return zone
 }
 
 // Event : base emo event.
 type Event struct {
 	Emoji   string
-	Log     Logger
+	Zone    Zone
 	IsError bool
 	Args    []any
 	From    string
@@ -90,28 +102,32 @@ func (e *Event) Error() string {
 		e.cache = strings.Join(text, " ")
 
 		if e.From != "" {
-			e.cache += " from " + e.Log.bold(e.From) +
+			e.cache += " from " + e.Zone.bold(e.From) +
 				" in " + e.File + ":" +
-				e.Log.white(strconv.Itoa(e.Line))
+				e.Zone.white(strconv.Itoa(e.Line))
 		}
 	}
 	return e.cache
 }
 
-// Stack forces the extraction and print of the call stack info:
-// caller function, file and line number.
+// Stack extracts info from the the call stack info
+// (caller function, file and line number)
+// in order to print it later.
 // The optional parameter allows to change the position within the call stack.
 func (e Event) Stack(level ...int) Event {
-	skip := int(e.Log.Skip)
-	if len(level) > 0 {
-		skip += level[0]
-	}
+	// do not compute again the runtime functions if already done
+	if e.From == "" {
+		skip := int(e.Zone.Skip)
+		if len(level) > 0 {
+			skip += level[0]
+		}
 
-	pc := make([]uintptr, 1)
-	runtime.Callers(skip, pc)
-	f := runtime.FuncForPC(pc[0])
-	e.File, e.Line = f.FileLine(pc[0])
-	e.From = f.Name()
+		pc := make([]uintptr, 1)
+		runtime.Callers(skip, pc)
+		f := runtime.FuncForPC(pc[0])
+		e.File, e.Line = f.FileLine(pc[0])
+		e.From = f.Name()
+	}
 	return e
 }
 
@@ -120,83 +136,31 @@ func (e Event) Err() error {
 	return &e
 }
 
-func (e Event) message() string {
-	msg := ""
-	if e.Log.Name != "" {
-		msg += "[" + e.Log.yellow(e.Log.Name) + "] "
-	}
+func optional(args []bool) (print, date, color bool, skip StackEnum) {
+	// default values
+	print, date, color, skip = true, false, true, StackAuto
 
-	if e.IsError {
-		msg += e.Log.red("Error") + " "
-	}
-
-	msg += e.Emoji + "  " + e.Error()
-
-	return msg
-}
-
-func optional(args []bool) (bool, bool, SkipEnum) {
 	switch len(args) {
 	case 0:
-		return true, true, SkipAuto
+		return print, date, color, skip
 	case 1:
-		return args[0], true, SkipAuto
+		return args[0], date, color, skip
 	case 2:
-		return args[0], args[1], SkipAuto
+		return args[0], args[1], color, skip
+	case 3:
+		return args[0], args[1], args[2], skip
 	default:
-		fl := SkipNo
-		if args[2] {
-			fl = SkipYes
+		skip := StackNo
+		if args[3] {
+			skip = StackYes
 		}
-		return args[0], args[1], fl
+		return args[0], args[1], args[2], skip
 	}
 }
 
-func (l Logger) red(s string) string {
-	if l.Color {
-		return color.Red(s)
-	}
-	return s
-}
-
-func (l Logger) yellow(s string) string {
-	if l.Color {
-		return color.Yellow(s)
-	}
-	return s
-}
-
-func (l Logger) bold(s string) string {
-	if l.Color {
-		return color.BoldWhite(s)
-	}
-	return s
-}
-
-func (l Logger) white(s string) string {
-	if l.Color {
-		return color.White(s)
-	}
-	return s
-}
-
-func processEvent(emoji string, l Logger, isError bool, args []any) Event {
-	e := newEvent(emoji, l, isError, args)
-
-	if isError || l.Print {
-		log.Print(e.message())
-	}
-
-	if l.Hook != nil {
-		l.Hook(e)
-	}
-
-	return e
-}
-
-func newEvent(emoji string, l Logger, isError bool, args []any) Event {
+func new(emoji string, zone Zone, isError bool, args []any) Event {
 	e := Event{
-		Log:     l,
+		Zone:    zone,
 		Emoji:   emoji,
 		IsError: isError,
 		Args:    args,
@@ -205,9 +169,74 @@ func newEvent(emoji string, l Logger, isError bool, args []any) Event {
 		Line:    0,
 	}
 
-	if (l.Skip == SkipAuto && e.IsError && l.Print) || int(l.Skip) > 0 {
+	if (zone.Skip >= StackYes) || (zone.Skip == StackAuto && e.IsError && zone.Print) {
 		e = e.Stack(4)
 	}
 
 	return e
+}
+
+func (e Event) print() Event {
+	if e.IsError || e.Zone.Print {
+		m := e.message()
+		if e.Zone.Date {
+			log.Print(m)
+		} else {
+			fmt.Println(m)
+		}
+	}
+	return e
+}
+
+func (e Event) callHook() Event {
+	if e.Zone.Hook != nil {
+		e = e.Stack()
+		e.Zone.Hook(e)
+	}
+	return e
+}
+
+func (e Event) message() string {
+	msg := ""
+	if e.Zone.Name != "" {
+		msg += "[" + e.Zone.yellow(e.Zone.Name) + "] "
+	}
+
+	msg += e.Emoji
+
+	if e.IsError {
+		msg += " " + e.Zone.red("ERROR")
+	}
+
+	msg += "  " + e.Error()
+
+	return msg
+}
+
+func (zone Zone) red(s string) string {
+	if zone.Color {
+		return color.Red(s)
+	}
+	return s
+}
+
+func (zone Zone) yellow(s string) string {
+	if zone.Color {
+		return color.Yellow(s)
+	}
+	return s
+}
+
+func (zone Zone) bold(s string) string {
+	if zone.Color {
+		return color.BoldWhite(s)
+	}
+	return s
+}
+
+func (zone Zone) white(s string) string {
+	if zone.Color {
+		return color.White(s)
+	}
+	return s
 }
