@@ -14,7 +14,8 @@ import (
 type Logger struct {
 	Name  string
 	Print bool
-	Hook  func(Event)
+	Color bool
+	Hook  func(Error)
 }
 
 // Error : base emo event.
@@ -29,26 +30,17 @@ type Error struct {
 }
 
 // NewLogger : create a logger.
-func NewLogger(name string, print ...bool) Logger {
-	p := true
-	if len(print) > 0 {
-		p = print[0]
-	}
-	return Logger{
-		Name:  name,
-		Print: p,
-	}
+func NewLogger(name string, args ...bool) Logger {
+	return NewLoggerWithHook(name, nil, args...)
 }
 
 // NewLoggerWithHook : create a Logger with a function hook
-func NewLoggerWithHook(name string, hook func(Event), print ...bool) Logger {
-	p := true
-	if len(print) > 0 {
-		p = print[0]
-	}
+func NewLoggerWithHook(name string, hook func(Error), args ...bool) Logger {
+	print, color := optional(args)
 	return Logger{
 		Name:  name,
-		Print: p,
+		Print: print,
+		Color: color,
 		Hook:  hook,
 	}
 }
@@ -100,9 +92,9 @@ func (e Error) Error() string {
 	str := strings.Join(text, " ")
 
 	if e.IsError && e.Log.Print {
-		str += " from " + color.BoldWhite(e.From) +
+		str += " from " + e.Log.bold(e.From) +
 			" in " + e.File + ":" +
-			color.White(strconv.Itoa(e.Line))
+			e.Log.white(strconv.Itoa(e.Line))
 	}
 
 	return str
@@ -111,14 +103,53 @@ func (e Error) Error() string {
 func (e Error) message() string {
 	msg := ""
 	if e.Log.Name != "" {
-		msg += "[" + color.Yellow(e.Log.Name) + "] "
+		msg += "[" + e.Log.yellow(e.Log.Name) + "] "
 	}
 
 	if e.IsError {
-		msg += color.Red("Error") + " "
+		msg += e.Log.red("Error") + " "
 	}
 
 	msg += e.Emoji + "  " + e.Error()
 
 	return msg
+}
+
+func optional(args []bool) (bool, bool) {
+	switch len(args) {
+	case 0:
+		return true, true
+	case 1:
+		return args[0], true
+	default:
+		return args[0], args[1]
+	}
+}
+
+func (l Logger) red(s string) string {
+	if l.Color {
+		return color.Red(s)
+	}
+	return s
+}
+
+func (l Logger) yellow(s string) string {
+	if l.Color {
+		return color.Yellow(s)
+	}
+	return s
+}
+
+func (l Logger) bold(s string) string {
+	if l.Color {
+		return color.BoldWhite(s)
+	}
+	return s
+}
+
+func (l Logger) white(s string) string {
+	if l.Color {
+		return color.White(s)
+	}
+	return s
 }
