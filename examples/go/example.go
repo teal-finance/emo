@@ -6,11 +6,11 @@ import (
 	"github.com/teal-finance/emo"
 )
 
-func hook(err emo.Event) {
-	fmt.Println("Event hook", err)
+func hook(evt emo.Event) {
+	fmt.Printf("hook has been triggered with event: %+v"+"\n", evt)
 }
 
 func main() {
-	log := emo.NewLoggerWithHook("example", hook)
-	log.Info("Test info")
+	zone := emo.NewZoneWithHook("example", hook)
+	zone.Info("Test info")
 }
