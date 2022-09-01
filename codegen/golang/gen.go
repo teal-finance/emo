@@ -38,7 +38,7 @@ func genFunc(name, emoji string, isError bool) string {
 	if isError {
 		return `
 func (zone Zone) ` + name + `(args ...any) Event {
-	return new("` + emoji + `", zone, ` + strconv.FormatBool(isError) + `, args).print().callHook()
+	return NewEvent("` + emoji + `", zone, ` + strconv.FormatBool(isError) + `, args).Print().CallHook()
 }
 	`
 	}
@@ -46,7 +46,7 @@ func (zone Zone) ` + name + `(args ...any) Event {
 	return `
 func (zone Zone) ` + name + `(args ...any) Event {
 	if zone.Print || (zone.Hook != nil) {
-		return new("` + emoji + `", zone, ` + strconv.FormatBool(isError) + `, args).print().callHook()
+		return NewEvent("` + emoji + `", zone, ` + strconv.FormatBool(isError) + `, args).Print().CallHook()
 	}
 	var evt Event
 	return evt

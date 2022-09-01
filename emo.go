@@ -158,7 +158,7 @@ func optional(args []bool) (print, date, color bool, stack StackEnum) {
 	}
 }
 
-func new(emoji string, zone Zone, isError bool, args []any) Event {
+func NewEvent(emoji string, zone Zone, isError bool, args []any) Event {
 	e := Event{
 		Zone:    zone,
 		Emoji:   emoji,
@@ -176,7 +176,7 @@ func new(emoji string, zone Zone, isError bool, args []any) Event {
 	return e
 }
 
-func (e Event) print() Event {
+func (e Event) Print() Event {
 	if e.IsError || e.Zone.Print {
 		m := e.message()
 		if e.Zone.Date {
@@ -188,7 +188,7 @@ func (e Event) print() Event {
 	return e
 }
 
-func (e Event) callHook() Event {
+func (e Event) CallHook() Event {
 	if e.Zone.Hook != nil {
 		e = e.Stack()
 		e.Zone.Hook(e)
