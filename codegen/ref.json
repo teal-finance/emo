@@ -155,6 +155,11 @@
     "isError": false
   },
   {
+    "name": "Security",
+    "emoji": "🔒",
+    "isError": false
+  },
+  {
     "name": "AccessToken",
     "emoji": "🔑",
     "isError": false
@@ -177,6 +182,16 @@
   {
     "name": "Stop",
     "emoji": "🛑",
+    "isError": false
+  },
+  {
+    "name": "In",
+    "emoji": "→",
+    "isError": false
+  },
+  {
+    "name": "Out",
+    "emoji": "←",
     "isError": false
   },
   {

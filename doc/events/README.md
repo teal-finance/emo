@@ -34,11 +34,14 @@
 | Output        |   📤   |          |
 | Function      |   🔨   |          |
 | Key           |   🔑   |          |
+| Security      |   🔒   |          |
 | AccessToken   |   🔑   |          |
 | RefreshToken  |   🗝️   |          |
 | Transmit      |   📡   |          |
 | Start         |   🏁   |          |
 | Stop          |   🛑   |          |
+| In            |   →   |          |
+| Out           |   ←   |          |
 | ArrowIn       |   =>   |          |
 | ArrowOut      |   <=   |          |
 | SmallArrowIn  |   ->   |          |

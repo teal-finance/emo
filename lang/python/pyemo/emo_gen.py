@@ -162,6 +162,9 @@ class Emo:
     def key(self, *args):
         return self.emo("🔑", list(args))
 
+    def security(self, *args):
+        return self.emo("🔒", list(args))
+
     def access_token(self, *args):
         return self.emo("🔑", list(args))
 
@@ -176,6 +179,12 @@ class Emo:
 
     def stop(self, *args):
         return self.emo("🛑", list(args))
+
+    def in(self, *args):
+        return self.emo("→", list(args))
+
+    def out(self, *args):
+        return self.emo("←", list(args))
 
     def arrow_in(self, *args):
         return self.emo("=>", list(args))

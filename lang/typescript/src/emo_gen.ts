@@ -105,6 +105,8 @@ export default class Emo {
 
 	key(...obj: any[]): string { return this.emo("🔑", obj); }
 
+	security(...obj: any[]): string { return this.emo("🔒", obj); }
+
 	accessToken(...obj: any[]): string { return this.emo("🔑", obj); }
 
 	refreshToken(...obj: any[]): string { return this.emo("🗝️", obj); }
@@ -114,6 +116,10 @@ export default class Emo {
 	start(...obj: any[]): string { return this.emo("🏁", obj); }
 
 	stop(...obj: any[]): string { return this.emo("🛑", obj); }
+
+	in(...obj: any[]): string { return this.emo("→", obj); }
+
+	out(...obj: any[]): string { return this.emo("←", obj); }
 
 	arrowIn(...obj: any[]): string { return this.emo("=>", obj); }
 

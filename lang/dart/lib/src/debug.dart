@@ -253,6 +253,11 @@ class EmoDebug {
   /// emoji: 🔑
   String key([dynamic obj, String? domain]) => emo("🔑", obj, domain);
 
+  /// A debug message for security
+  ///
+  /// emoji: 🔒
+  String security([dynamic obj, String? domain]) => emo("🔒", obj, domain);
+
   /// A debug message for accessToken
   ///
   /// emoji: 🔑
@@ -277,6 +282,16 @@ class EmoDebug {
   ///
   /// emoji: 🛑
   String stop([dynamic obj, String? domain]) => emo("🛑", obj, domain);
+
+  /// A debug message for in
+  ///
+  /// emoji: →
+  String in([dynamic obj, String? domain]) => emo("→", obj, domain);
+
+  /// A debug message for out
+  ///
+  /// emoji: ←
+  String out([dynamic obj, String? domain]) => emo("←", obj, domain);
 
   /// A debug message for arrowIn
   ///

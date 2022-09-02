@@ -731,6 +731,31 @@ func (zone Zone) Keyf(format string, v ...any) Event {
 	return zone.Key(s)
 }
 
+func Security(args ...any) Event {
+	return DefaultZone.Security(args...)
+}
+
+func Securityf(format string, v ...any) Event {
+	return DefaultZone.Securityf(format, v...)
+}
+
+func (zone Zone) Security(args ...any) Event {
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
+	}
+	return zone.NewEvent("🔒", false, args...).Print().CallHook()
+}
+
+func (zone Zone) Securityf(format string, v ...any) Event {
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
+	}
+	s := fmt.Sprintf(format, v...)
+	return zone.Security(s)
+}
+
 func AccessToken(args ...any) Event {
 	return DefaultZone.AccessToken(args...)
 }
@@ -854,6 +879,56 @@ func (zone Zone) Stopf(format string, v ...any) Event {
 	}
 	s := fmt.Sprintf(format, v...)
 	return zone.Stop(s)
+}
+
+func In(args ...any) Event {
+	return DefaultZone.In(args...)
+}
+
+func Inf(format string, v ...any) Event {
+	return DefaultZone.Inf(format, v...)
+}
+
+func (zone Zone) In(args ...any) Event {
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
+	}
+	return zone.NewEvent("→", false, args...).Print().CallHook()
+}
+
+func (zone Zone) Inf(format string, v ...any) Event {
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
+	}
+	s := fmt.Sprintf(format, v...)
+	return zone.In(s)
+}
+
+func Out(args ...any) Event {
+	return DefaultZone.Out(args...)
+}
+
+func Outf(format string, v ...any) Event {
+	return DefaultZone.Outf(format, v...)
+}
+
+func (zone Zone) Out(args ...any) Event {
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
+	}
+	return zone.NewEvent("←", false, args...).Print().CallHook()
+}
+
+func (zone Zone) Outf(format string, v ...any) Event {
+	if !zone.enabled(false) {
+		var evt Event
+		return evt
+	}
+	s := fmt.Sprintf(format, v...)
+	return zone.Out(s)
 }
 
 func ArrowIn(args ...any) Event {
