@@ -7,10 +7,10 @@ import (
 )
 
 func hook(evt emo.Event) {
-	fmt.Println("Event hook", evt.Error)
+	fmt.Printf("hook has been triggered with event: %+v"+"\n", evt)
 }
 
 func main() {
-	em := emo.NewZoneWithHook("example", hook)
-	em.Info("Test info")
+	zone := emo.NewZoneWithHook("example", hook)
+	zone.Info("Test info")
 }
