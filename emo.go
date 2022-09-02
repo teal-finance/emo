@@ -164,7 +164,7 @@ func GlobalTracing(enable bool) {
 
 var tracePrinted bool = false
 
-// P forces the log to be always printed, even when zone.Verbose=false.
+// P forces the event to be always printed, even when zone.Verbose=false.
 //
 // P can also be used to never print the log. Example:
 //
@@ -428,11 +428,11 @@ func (zone Zone) Printf(format string, v ...any) Event {
 }
 
 func (zone Zone) Warn(args ...any) Event {
-	return zone.Warning(args...)
+	return zone.P().Warning(args...)
 }
 
 func (zone Zone) Warnf(format string, v ...any) Event {
-	return zone.Warningf(format, v...)
+	return zone.P().Warningf(format, v...)
 }
 
 func (zone Zone) Fatal(args ...any) {
