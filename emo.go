@@ -427,12 +427,16 @@ func (zone Zone) Printf(format string, v ...any) Event {
 	return zone.Print(s)
 }
 
+// Warn looks same as Warning, but:
+//
+// - Warn is printed even when Verbose=No, and
+// - Warn is printed with the call-stack info (similar to Error).
 func (zone Zone) Warn(args ...any) Event {
-	return zone.P().Warning(args...)
+	return zone.P().S().Warning(args...)
 }
 
 func (zone Zone) Warnf(format string, v ...any) Event {
-	return zone.P().Warningf(format, v...)
+	return zone.P().S().Warningf(format, v...)
 }
 
 func (zone Zone) Fatal(args ...any) {
