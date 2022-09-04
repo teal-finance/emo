@@ -104,9 +104,9 @@ Sometimes, an non-error event should be still printed, even when the `Zone` is c
 In that case, the `P()` helper function can be used:
 
 ```go
-var prod  = true
+var prod    = true
 var verbose = !prod
-var zone  = emo.NewZone("api", verbose)
+var zone    = emo.NewZone("api", verbose)
 
 func start() {
     zone.P().Info("Starting...")
@@ -135,6 +135,30 @@ zone.S(-1).Error("v=", v)   // never print the call stack info
 zone.S(0).Error("v=", v)    // inherits the global settings, usually print when zone.Print=true (default)
 zone.S(1).Error("v=", v)    // always print the call stack info, like S()
 zone.S(2).Error("v=", v)    // always print, but use the caller layer at one level up
+```
+
+## Temporary change the `Event` name
+
+The `N()` helper function sets a temporary name for the current event only:
+
+```go
+var zone = emo.NewZone("API")
+zone.N("GET").Debug("Received a GET request with v=", v)   // replaces [API] -> [GET]
+```
+
+Another example:
+
+```go
+var zA = emo.NewZone("A")
+var zB = emo.NewZone("B")
+
+zA.Info("this Info event is related to the zone A")
+zB.Info("this Info event is related to the zone B")
+
+// previous lines can be replaced by:
+
+emo.DefaultZone.N("A").Info("this Info event is related to the zone A")
+emo.DefaultZone.N("B").Info("this Info event is related to the zone B")
 ```
 
 ## Timestamp
