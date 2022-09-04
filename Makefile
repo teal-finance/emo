@@ -10,6 +10,7 @@ help:
 	#
 	# test  Test the Go library
 	# cov   Test and visualize the coverage
+	# vet   Upgrade deps, Format code, Test and Run example
 
 .PHONY: all
 all:
@@ -37,8 +38,19 @@ doc:
 
 .PHONY: test
 test:
-	go test -race -vet all -tags=emo -coverprofile=c.out
+	go test -race -vet all -tags=emo -coverprofile=c.out ./...
 
 .PHONY: cov
 cov: test
 	go tool cover -html c.out
+
+.PHONY: vet
+vet:
+	go mod tidy
+	go get -u -t all
+	go mod tidy
+	go generate ./...
+	go run mvdan.cc/gofumpt@latest -w -extra -l -lang 1.19 .
+	go build ./...
+	go test -race -vet all -tags=emo -coverprofile=c.out ./...
+	go run ./examples/go/example.go
