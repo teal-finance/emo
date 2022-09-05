@@ -43,8 +43,19 @@ const (
 // - verbose: true => print all ; false => only isError ; absent (default) => depends on DefaultZone.Verbose
 // - stack: true => print the call stack info ; false => only isError ; absent (default) => depends on DefaultZone.Verbose
 func NewZone(name string, args ...bool) Zone {
+	if maxNameLen < len(name) {
+		maxNameLen = len(name)
+		fmtName = "%-" + strconv.Itoa(maxNameLen) + "s"
+		fmtNameNC = "%-" + strconv.Itoa(maxNameLen+2) + "s"
+	}
 	return NewZoneWithHook(name, nil, args...)
 }
+
+var (
+	maxNameLen = 1
+	fmtName    = "%-1s"
+	fmtNameNC  = "%-3s" // NC = non-color
+)
 
 // NewZoneWithHook : create a Zone with a function hook
 func NewZoneWithHook(name string, hook func(Event), args ...bool) Zone {
@@ -238,20 +249,11 @@ func (e Event) Print() Event {
 }
 
 func (e Event) Message() string {
-	msg := ""
-	if e.Zone.Name != "" {
-		msg += "[" + yellow(e.Zone.Name) + "] "
-	}
-
-	msg += e.Emoji
-
+	msg := e.Zone.highlightName() + e.Emoji
 	if e.IsError {
 		msg += " " + red("ERROR")
 	}
-
-	msg += "  " + e.Error()
-
-	return msg
+	return msg + "  " + e.Error()
 }
 
 // Err converts an Event to a standard Go error.
@@ -476,11 +478,14 @@ func red(s string) string {
 	return s
 }
 
-func yellow(s string) string {
-	if outputColored {
-		return color.Yellow(s)
+func (zone Zone) highlightName() string {
+	if zone.Name == "" {
+		return ""
 	}
-	return s
+	if outputColored {
+		return color.Yellow(fmt.Sprintf(fmtName, zone.Name)) + " "
+	}
+	return fmt.Sprintf(fmtNameNC, "["+zone.Name+"]")
 }
 
 func bold(s string) string {
