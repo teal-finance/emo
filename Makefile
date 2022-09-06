@@ -1,16 +1,15 @@
 help:
-	# Use 'make <target>' where <target> is one of:
+	# make all    Generate all
+	# make go     Generate code for the Go library
+	# make ts     Generate code for the Typescript library
+	# make py     Generate code for the Python library
+	# make dart   Generate code for the Dart library
+	# make doc    Generate the documentation
 	#
-	# all   Generate all
-	# go    Generate code for the Go library
-	# ts    Generate code for the Typescript library
-	# py    Generate code for the Python library
-	# dart  Generate code for the Dart library
-	# doc   Generate the documentation
-	#
-	# test  Test the Go library
-	# cov   Test and visualize the coverage
-	# vet   Upgrade deps, Format code, Test and Run example
+	# make up     Upgrade deps, Generate code, Format code, Check build
+	# make test   Test the Go library
+	# make cov    Test and visualize the code coverage
+	# make vet    Upgrade, Generate, Format, Build, Test, Run example and Lint
 
 .PHONY: all
 all:
@@ -36,21 +35,24 @@ dart:
 doc:
 	go run codegen/main.go -doc
 
-.PHONY: test
-test:
-	go test -race -vet all -tags=emo -coverprofile=c.out ./...
-
-.PHONY: cov
-cov: test
-	go tool cover -html c.out
-
-.PHONY: vet
-vet:
+.PHONY: up
+up:
 	go mod tidy
 	go get -u -t all
 	go mod tidy
 	go generate ./...
 	go run mvdan.cc/gofumpt@latest -w -extra -l -lang 1.19 .
 	go build ./...
-	go test -race -vet all -tags=emo -coverprofile=c.out ./...
+
+.PHONY: test
+test:
+	go test -race -vet all -tags=emo -coverprofile=code-coverage-of-tests.out ./...
+
+.PHONY:
+cov: test
+	go tool cover -html code-coverage-of-tests.out
+
+.PHONY: vet
+vet: up test
 	go run ./examples/go/example.go
+	go run github.com/golangci/golangci-lint/cmd/golangci-lint@latest run --fix
