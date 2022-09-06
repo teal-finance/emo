@@ -99,6 +99,20 @@ var DefaultZone = Zone{
 	Hook:      nil,
 }
 
+// GlobalTimestamp enables the insertion of a date/time timestamp for each event print.
+// To disable use `emo.GlobalTimestamp(false)`.
+func GlobalTimestamp(enable ...bool) {
+	timestampPrefixed = true
+	if len(enable) > 0 {
+		timestampPrefixed = enable[0]
+	}
+}
+
+// GlobalColoring enables/disables the coloring of the event print.
+func GlobalColoring(enable bool) {
+	outputColored = enable
+}
+
 // GlobalVerbosity controls the verbose mode for all zones having Verbose=Auto.
 func GlobalVerbosity(enable bool) {
 	DefaultZone.SetVerbosity(enable)
@@ -142,24 +156,6 @@ func (zone *Zone) SetStackInfo(enable ...bool) {
 // SetHook sets the callback function to be triggered when an Event occurs.
 func (zone *Zone) SetHook(hook func(Event)) {
 	zone.Hook = hook
-}
-
-// GlobalTimestamp enables the insertion of a date/time timestamp for each event print.
-// To disable use `emo.GlobalTimestamp(false)`.
-func GlobalTimestamp(enable ...bool) {
-	timestampPrefixed = true
-	if len(enable) > 0 {
-		timestampPrefixed = enable[0]
-	}
-}
-
-// GlobalColoring enables the coloring of some portion of the event print.
-// To disable use `emo.GlobalColoring(false)`.
-func GlobalColoring(enable ...bool) {
-	outputColored = true
-	if len(enable) > 0 {
-		outputColored = enable[0]
-	}
 }
 
 // timestampPrefixed = true => prints are prefixed with the current timestamp
