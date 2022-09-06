@@ -60,7 +60,7 @@ func TestEmo_S(t *testing.T) {
 	}
 
 	s := z.S()
-	w, x, y, f, d, p, g, q := s.Warning(""), s.Warn(""), z.Warn(""), z.Warnf(""), emo.DefaultZone.Warn(""), s.Print(""), s.Printf(""), emo.DefaultZone.S().Print("")
+	w, x, y, f, d, e, p, g, q := s.Warning(""), s.Warn(""), z.Warn(""), z.Warnf(""), emo.DefaultZone.Warn(""), z.Errorf(""), s.Print(""), s.Printf(""), emo.DefaultZone.S().Print("")
 
 	if w.File != evt.File {
 		t.Errorf("want call stack file equality, but got S.Warning=%v S.Info=%v", w.File, evt.File)
@@ -76,6 +76,9 @@ func TestEmo_S(t *testing.T) {
 	}
 	if w.File != d.File {
 		t.Errorf("want call stack file equality, but got S.Warning=%v DefaultZone.Warn=%v", w.File, d.File)
+	}
+	if w.File != e.File {
+		t.Errorf("want call stack file equality, but got S.Warning=%v Errorf=%v", w.File, e.File)
 	}
 	if w.File != p.File {
 		t.Errorf("want call stack file equality, but got S.Warning=%v S.Print=%v", w.File, p.File)
@@ -101,6 +104,9 @@ func TestEmo_S(t *testing.T) {
 	}
 	if w.Line != d.Line {
 		t.Errorf("want call stack line equality, but got S.Warning=%v DefaultZone.Warn=%v", w.Line, d.Line)
+	}
+	if w.Line != e.Line {
+		t.Errorf("want call stack line equality, but got S.Warning=%v Errorf=%v", w.Line, e.Line)
 	}
 	if w.Line != p.Line {
 		t.Errorf("want call stack line equality, but got S.Warning=%v S.Print=%v", w.Line, p.Line)
