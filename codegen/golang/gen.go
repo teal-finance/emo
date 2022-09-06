@@ -37,19 +37,16 @@ import "fmt"
 `
 
 func genFunc(name, emoji string, isError bool) string {
-	defaultFunctions := `
+	errorFunctions := `
 
 func ` + name + `(args ...any) Event {
-	return DefaultZone.` + name + `(args...)
+	return DefaultZone.NewEvent("` + emoji + `", true, args...).Print().CallHook()
 }
 
 func ` + name + `f(format string, v ...any) Event {
-	return DefaultZone.` + name + `f(format, v...)
+	s := fmt.Sprintf(format, v...)
+	return DefaultZone.NewEvent("` + emoji + `", true, s).Print().CallHook()
 }
-
-`
-
-	errorFunctions := `
 
 func (zone Zone) ` + name + `(args ...any) Event {
 	return zone.NewEvent("` + emoji + `", true, args...).Print().CallHook()
@@ -57,11 +54,28 @@ func (zone Zone) ` + name + `(args ...any) Event {
 
 func (zone Zone) ` + name + `f(format string, v ...any) Event {
 	s := fmt.Sprintf(format, v...)
-	return zone.` + name + `(s)
+	return zone.NewEvent("` + emoji + `", true, s).Print().CallHook()
 }
 
 `
 	nonErrorFunctions := `
+
+func ` + name + `(args ...any) Event {
+	if !DefaultZone.enabled(false) {
+		var evt Event
+		return evt
+	}
+	return DefaultZone.NewEvent("` + emoji + `", false, args...).Print().CallHook()
+}
+
+func ` + name + `f(format string, v ...any) Event {
+	if !DefaultZone.enabled(false) {
+		var evt Event
+		return evt
+	}
+	s := fmt.Sprintf(format, v...)
+	return DefaultZone.NewEvent("` + emoji + `", false, s).Print().CallHook()
+}
 
 func (zone Zone) ` + name + `(args ...any) Event {
 	if !zone.enabled(false) {
@@ -77,13 +91,13 @@ func (zone Zone) ` + name + `f(format string, v ...any) Event {
 		return evt
 	}
 	s := fmt.Sprintf(format, v...)
-	return zone.` + name + `(s)
+	return zone.NewEvent("` + emoji + `", false, s).Print().CallHook()
 }
 `
 
 	if isError {
-		return defaultFunctions + errorFunctions
+		return errorFunctions
 	} else {
-		return defaultFunctions + nonErrorFunctions
+		return nonErrorFunctions
 	}
 }

@@ -16,7 +16,7 @@ import (
 func ObjectInfo(args ...any) {
 	msg := "[" + color.Yellow("object info") + "] "
 	for _, a := range args {
-		fmt.Print(msg+"Type: %T Value: %#v", a, a)
+		fmt.Println(msg+"Type: %T Value: %#v", a, a)
 	}
 }
 
@@ -28,66 +28,25 @@ type Zone struct {
 	Hook      func(Event)
 }
 
-type ParamType int
-
-const (
-	Auto ParamType = 0
-	No   ParamType = -1
-	Yes  ParamType = 1
-)
-
-// NewZone : create a zone.
-//
-// Optional arguments are booleans:
-//
-// - verbose: true => print all ; false => only isError ; absent (default) => depends on DefaultZone.Verbose
-// - stack: true => print the call stack info ; false => only isError ; absent (default) => depends on DefaultZone.Verbose
-func NewZone(name string, args ...bool) Zone {
-	if maxNameLen < len(name) {
-		maxNameLen = len(name)
-		fmtName = "%-" + strconv.Itoa(maxNameLen) + "s"
-		fmtNameNC = "%-" + strconv.Itoa(maxNameLen+2) + "s"
-	}
-	return NewZoneWithHook(name, nil, args...)
-}
-
 var (
 	maxNameLen = 1
 	fmtName    = "%-1s"
 	fmtNameNC  = "%-3s" // NC = non-color
 )
 
-// NewZoneWithHook : create a Zone with a function hook
-func NewZoneWithHook(name string, hook func(Event), args ...bool) Zone {
-	v, si := optional(args)
+// NewZone : create a zone.
+func NewZone(name string) Zone {
+	if maxNameLen < len(name) {
+		maxNameLen = len(name)
+		fmtName = "%-" + strconv.Itoa(maxNameLen) + "s"
+		fmtNameNC = "%-" + strconv.Itoa(maxNameLen+2) + "s"
+	}
 	return Zone{
 		Name:      name,
-		Hook:      hook,
-		Verbose:   v,
-		StackInfo: si,
+		Verbose:   Auto,
+		StackInfo: Auto,
+		Hook:      nil,
 	}
-}
-
-// optional depends on DefaultZone for the default values.
-func optional(args []bool) (verbose, stackInfo ParamType) {
-	verbose = DefaultZone.Verbose
-	stackInfo = DefaultZone.StackInfo
-
-	if len(args) > 0 {
-		verbose = No
-		if args[0] {
-			verbose = Yes
-		}
-	}
-
-	if len(args) > 1 {
-		stackInfo = No
-		if args[1] {
-			stackInfo = Yes
-		}
-	}
-
-	return verbose, stackInfo
 }
 
 // DefaultZone allows to use emo without having to create a new zone.
@@ -99,13 +58,20 @@ var DefaultZone = Zone{
 	Hook:      nil,
 }
 
+type ParamType int
+
+const (
+	Auto ParamType = 0
+	No   ParamType = -1
+	Yes  ParamType = 1
+)
+
 // GlobalTimestamp enables the insertion of a date/time timestamp for each event print.
-// To disable use `emo.GlobalTimestamp(false)`.
-func GlobalTimestamp(enable ...bool) {
-	timestampPrefixed = true
-	if len(enable) > 0 {
-		timestampPrefixed = enable[0]
-	}
+// To disable use:
+//
+//	emo.GlobalTimestamp(false)
+func GlobalTimestamp(enable bool) {
+	timestampPrefixed = enable
 }
 
 // GlobalColoring enables/disables the coloring of the event print.
@@ -115,47 +81,89 @@ func GlobalColoring(enable bool) {
 
 // GlobalVerbosity controls the verbose mode for all zones having Verbose=Auto.
 func GlobalVerbosity(enable bool) {
-	DefaultZone.SetVerbosity(enable)
+	if enable {
+		DefaultZone = DefaultZone.V()
+	} else {
+		DefaultZone = DefaultZone.V(false)
+	}
 }
 
-// GlobalStackInfo controls the printing of the call stack information for all zones having StackInfo=Auto.
-func GlobalStackInfo(enable ...bool) {
-	DefaultZone.SetStackInfo(enable...)
+// GlobalStackInfo enables/disables the call stack information for all zones having StackInfo=Auto.
+func GlobalStackInfo(enable bool) {
+	if enable {
+		DefaultZone = DefaultZone.S()
+	} else {
+		DefaultZone = DefaultZone.S(-1)
+	}
 }
 
 // SetHook sets the callback function to be triggered by all zones.
 func GlobalHook(hook func(Event)) {
-	DefaultZone.SetHook(hook)
+	DefaultZone = DefaultZone.SetHook(hook)
 }
 
 // SetVerbosity controls the verbose mode.
 // When used with DefaultZone, it impacts all zones having Verbose=Auto.
-func (zone *Zone) SetVerbosity(enable ...bool) {
-	zone.Verbose = Auto
-	if len(enable) > 0 {
-		if enable[0] {
-			zone.Verbose = Yes
+// V forces the event to be always printed, even when zone.Verbose=false.
+//
+// V can also be used to never print the log. Example:
+//
+//	zone.V(false).Error("my error")
+func (zone Zone) V(auto ...bool) Zone {
+	zone.Verbose = Yes
+	if len(auto) > 0 {
+		if auto[0] {
+			zone.Verbose = Auto
 		} else {
 			zone.Verbose = No
 		}
 	}
+	return zone
 }
 
-// SetStackInfo controls the printing of the call stack information.
-func (zone *Zone) SetStackInfo(enable ...bool) {
-	zone.StackInfo = Auto
-	if len(enable) > 0 {
-		if enable[0] {
-			zone.StackInfo = Yes
-		} else {
-			zone.StackInfo = No
+// S controls the printing of the call stack information.
+// Without arguments, S forces the retrieval
+// of the call stack info (i.e. caller function and file:line).
+//
+// The position within the call stack can be shifted with the optional parameter:
+//
+//	func myLoggerFunction(s string) { zone.S(2).Error(s) }
+//
+// S can also be used to disable the call stack info using a negative value:
+//
+//	zone.S(-1).Error("msg")
+//
+// The zero value is to use the global settings:
+//
+//	zone.S(0).Error("msg")
+func (zone Zone) S(position ...int) Zone {
+	// if StackInfo already shifts the call stack position
+	if zone.StackInfo > Yes {
+		if len(position) > 0 {
+			if position[0] < 0 {
+				zone.StackInfo = No
+			} else if position[0] > 0 {
+				// increment the call stack position
+				zone.StackInfo += ParamType(position[0])
+			}
+			// position[0]==0 is ignored because it may break the call stack position
+		}
+	} else {
+		zone.StackInfo = Yes
+		if len(position) > 0 {
+			if position[0] >= 1 {
+				position[0]++ // shift the call stack position one step more
+			}
+			zone.StackInfo = ParamType(position[0])
 		}
 	}
+	return zone
 }
 
 // SetHook sets the callback function to be triggered when an Event occurs.
-func (zone *Zone) SetHook(hook func(Event)) {
+func (zone Zone) SetHook(hook func(Event)) Zone {
 	zone.Hook = hook
+	return zone
 }
 
 // timestampPrefixed = true => prints are prefixed with the current timestamp
@@ -171,31 +179,10 @@ func GlobalTracing(enable bool) {
 
 var tracePrinted bool = false
 
-// P forces the event to be always printed, even when zone.Verbose=false.
+// N changes zone name and can be used, for example,
+// to temporary change the current event name:
 //
-// P can also be used to never print the log. Example:
-//
-//	zone.P(false).Error("my error")
-func (zone Zone) P(print ...bool) Zone {
-	zone.Verbose = Yes
-	if len(print) > 0 && !print[0] {
-		zone.Verbose = No
-	}
-	return zone
-}
-
-// S forces the retrieval of the call stack info (caller function and file:line).
-// The position within the stack can be changed with the optional parameter.
-// S can also be used to disable the call stack info
-func (zone Zone) S(skip ...int) Zone {
-	zone.StackInfo = Yes
-	if len(skip) > 0 {
-		zone.StackInfo = ParamType(skip[0])
-	}
-	return zone
-}
-
-// N changes temporary the current event name.
+//	zone.N("foo").Info("bar")
 func (zone Zone) N(name string) Zone {
 	zone.Name = name
 	return zone
@@ -212,8 +199,8 @@ func (zone Zone) NewEvent(emoji string, isError bool, args ...any) Event {
 		Line:    0,
 	}
 
-	if e.stackInfoPrinted() {
-		e = e.Stack(4)
+	if e.stackInfoEnabled() {
+		e = e.Stack()
 	}
 
 	return e
@@ -298,16 +285,18 @@ func (e Event) CallHook() Event {
 // (caller function, file and line number).
 // Then the event may be printed later.
 // The optional parameter allows to change the position within the call stack.
-func (e Event) Stack(level ...int) Event {
-	// do not compute again the runtime functions if already done
+func (e Event) Stack(optionalPosition ...int) Event {
+	// do not extract the call stack info if already done
 	if e.From == "" {
-		skip := int(e.Zone.StackInfo)
-		if len(level) > 0 {
-			skip += level[0]
+		position := 4
+		if e.Zone.StackInfo > Yes {
+			position = 3 + int(e.Zone.StackInfo)
 		}
-
+		if len(optionalPosition) > 0 {
+			position += optionalPosition[0]
+		}
 		pc := make([]uintptr, 1)
-		runtime.Callers(skip, pc)
+		runtime.Callers(position, pc)
 		f := runtime.FuncForPC(pc[0])
 		e.File, e.Line = f.FileLine(pc[0])
 		e.From = f.Name()
@@ -323,8 +312,8 @@ func (e Event) toBePrinted() bool {
 	return e.Zone.toBePrinted(e.IsError)
 }
 
-func (e Event) stackInfoPrinted() bool {
-	return e.Zone.stackInfoToBeAppended(e.IsError)
+func (e Event) stackInfoEnabled() bool {
+	return e.Zone.stackInfoEnabled(e.IsError)
 }
 
 func (zone Zone) toBePrinted(isError bool) bool {
@@ -343,7 +332,7 @@ func (zone Zone) toBePrinted(isError bool) bool {
 	return true
 }
 
-func (zone Zone) stackInfoToBeAppended(isError bool) bool {
+func (zone Zone) stackInfoEnabled(isError bool) bool {
 	if zone.StackInfo >= Yes {
 		return true
 	}
@@ -366,43 +355,20 @@ func (zone Zone) Default() *log.Logger {
 }
 
 func Trace(args ...any) Event {
-	return DefaultZone.Trace(args...)
+	if tracePrinted {
+		return DefaultZone.NewEvent("👣", false, args...).Print()
+	}
+	var evt Event
+	return evt
 }
 
 func Tracef(format string, v ...any) Event {
-	return DefaultZone.Tracef(format, v...)
-}
-
-func Print(args ...any) Event {
-	return DefaultZone.Print(args...)
-}
-
-func Printf(format string, v ...any) Event {
-	return DefaultZone.Printf(format, v...)
-}
-
-func Warn(args ...any) Event {
-	return DefaultZone.Warn(args...)
-}
-
-func Warnf(format string, v ...any) Event {
-	return DefaultZone.Warnf(format, v...)
-}
-
-func Fatal(args ...any) {
-	DefaultZone.Fatal(args...)
-}
-
-func Fatalf(format string, v ...any) {
-	DefaultZone.Fatalf(format, v...)
-}
-
-func Panic(args ...any) {
-	DefaultZone.Panic(args...)
-}
-
-func Panicf(format string, v ...any) {
-	DefaultZone.Panicf(format, v...)
+	if tracePrinted {
+		s := fmt.Sprintf(format, v...)
+		return DefaultZone.Trace(s)
+	}
+	var evt Event
+	return evt
 }
 
 func (zone Zone) Trace(args ...any) Event {
@@ -422,46 +388,84 @@ func (zone Zone) Tracef(format string, v ...any) Event {
 	return evt
 }
 
+// Warn looks same as Warning, but:
+//   - Warn is printed even when Verbose=No, and
+//   - Warn is printed with the call stack info (similar to Error).
+func Print(args ...any) Event {
+	return DefaultZone.V().NewEvent("📰", false, args...).Print().CallHook()
+}
+
+func Printf(format string, v ...any) Event {
+	s := fmt.Sprintf(format, v...)
+	return DefaultZone.V().NewEvent("📰", false, s).Print().CallHook()
+}
+
 func (zone Zone) Print(args ...any) Event {
-	return zone.P().NewEvent("📰", false, args...).Print().CallHook()
+	return zone.V().NewEvent("📰", false, args...).Print().CallHook()
 }
 
 func (zone Zone) Printf(format string, v ...any) Event {
 	s := fmt.Sprintf(format, v...)
-	return zone.Print(s)
+	return zone.V().NewEvent("📰", false, s).Print().CallHook()
 }
 
 // Warn looks same as Warning, but:
-//
-// - Warn is printed even when Verbose=No, and
-// - Warn is printed with the call-stack info (similar to Error).
+//   - Warn is printed even when Verbose=No, and
+//   - Warn is printed with the call stack info (similar to Error).
+func Warn(args ...any) Event {
+	return DefaultZone.V().S(1).Warning(args...)
+}
+
+func Warnf(format string, v ...any) Event {
+	return DefaultZone.V().S(1).Warningf(format, v...)
+}
+
+// Warn looks same as Warning, but:
+//   - Warn is printed even when Verbose=No, and
+//   - Warn is printed with the call stack info (similar to Error).
 func (zone Zone) Warn(args ...any) Event {
-	return zone.P().S().Warning(args...)
+	return zone.V().S(1).Warning(args...)
 }
 
 func (zone Zone) Warnf(format string, v ...any) Event {
-	return zone.P().S().Warningf(format, v...)
+	return zone.V().S(1).Warningf(format, v...)
+}
+
+func Fatal(args ...any) {
+	DefaultZone.S(1).Fatal(args...)
+}
+
+func Fatalf(format string, v ...any) {
+	DefaultZone.S(1).Fatalf(format, v...)
 }
 
 func (zone Zone) Fatal(args ...any) {
-	m := zone.NewEvent("🤯", true, args...).Message()
+	m := zone.S(1).NewEvent("🤯", true, args...).Message()
 	log.Fatal(m)
 }
 
 func (zone Zone) Fatalf(format string, v ...any) {
 	s := fmt.Sprintf(format, v...)
-	m := zone.NewEvent("🤯", true, s).Message()
+	m := zone.S(1).NewEvent("🤯", true, s).Message()
 	log.Fatal(m)
 }
 
+func Panic(args ...any) {
+	DefaultZone.S(1).Panic(args...)
+}
+
+func Panicf(format string, v ...any) {
+	DefaultZone.S(1).Panicf(format, v...)
+}
+
 func (zone Zone) Panic(args ...any) {
-	m := zone.NewEvent("😵", true, args...).Message()
+	m := zone.S(1).NewEvent("😵", true, args...).Message()
 	log.Panic(m)
 }
 
 func (zone Zone) Panicf(format string, v ...any) {
 	s := fmt.Sprintf(format, v...)
-	m := zone.NewEvent("😵", true, s).Message()
+	m := zone.S(1).NewEvent("😵", true, s).Message()
 	log.Panic(m)
 }
 
@@ -481,7 +485,7 @@ func (zone Zone) highlightName() string {
 	if outputColored {
 		return color.Yellow(fmt.Sprintf(fmtName, zone.Name)) + " "
 	}
-	return fmt.Sprintf(fmtNameNC, "["+zone.Name+"]")
+	return fmt.Sprintf(fmtNameNC, "["+zone.Name+"] ")
 }
 
 func bold(s string) string {

@@ -11,6 +11,8 @@ func hook(evt emo.Event) {
 }
 
 func main() {
-	zone := emo.NewZoneWithHook("example", hook)
+	zone := emo.NewZone("example").SetHook(hook)
 	zone.Info("Test info")
+	// Output:
+	// hook has been triggered with event: {Emoji:ℹ️ Zone:{Name:example Verbose:0 StackInfo:0 Hook:0x48e9c0} IsError:false Args:[Test info] From:main.main File:*/emo/examples/go/example.go Line:16 cache:}
 }

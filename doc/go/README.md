@@ -49,17 +49,17 @@ See the complete [events list](../events/README.md)
 To only print the errors:
 
 ```go
-var zone = emo.NewZone("api", false)
+var zone = emo.NewZone("api").V(false) // Verbose=false
 ```
 
-Setting that second parameter to `false` disables the printing for logs that are not errors.
+`V(false)` disables the printing for logs that are not errors.
 
-This can also be later set using:
+Three possibilities:
 
 ```go
-zone.SetVerbosity(false) // only print when isError
-zone.SetVerbosity(true)  // always print any event (except Trace events)
-zone.SetVerbosity()      // revert to default: inherit the global settings
+zone = zone.V(false) // no verbose: only print when isError
+zone = zone.V(true)  // default: inherit the global settings
+zone = zone.V()      // verbose: print all events (except Trace events)
 ```
 
 To change all zones at once:
@@ -71,8 +71,8 @@ emo.GlobalVerbosity(true)  // only isError for all zones inheriting the global s
 
 ## Call stack info
 
-By default emo prints the call-stack info only when `isError` and in verbose mode.
-The call-stack info contains the caller function, the source file, and line number.
+By default emo prints the call stack info only when `isError` and in verbose mode.
+The call stack info contains the caller function, the source file, and line number.
 
 To always print it, or to never print it, use the third parameter:
 
@@ -85,16 +85,16 @@ var zone = emo.NewZone("api", verbose, stack)
 This can also be later set using a similar function as for `zone.SetVerbosity()`:
 
 ```go
-zone.SetStackInfo(true)  // print the call-stack info for all events
-zone.SetStackInfo(false) // never print the call-stack info for any event
+zone.SetStackInfo(true)  // print the call stack info for all events
+zone.SetStackInfo(false) // never print the call stack info for any event
 zone.SetStackInfo()      // inherits from global settings
 ```
 
-To control the call-stack info for all zones:
+To control the call stack info for all zones:
 
 ```go
-emo.GlobalStackInfo(true)  // print the call-stack info for the zones inheriting global settings
-emo.GlobalStackInfo(false) // never print the call-stack for the zones inheriting global settings
+emo.GlobalStackInfo(true)  // print the call stack info for the zones inheriting global settings
+emo.GlobalStackInfo(false) // never print the call stack for the zones inheriting global settings
 emo.GlobalStackInfo()      // default: only when `isError` and in verbose mode
 ```
 
