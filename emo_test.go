@@ -59,62 +59,64 @@ func TestEmo_S(t *testing.T) {
 		t.Error("want prefix -->", prefix)
 	}
 
-	s := z.S()
-	w, x, y, f, d, e, p, g, q := s.Warning(""), s.Warn(""), z.Warn(""), z.Warnf(""), emo.DefaultZone.Warn(""), z.Errorf(""), s.Print(""), s.Printf(""), emo.DefaultZone.S().Print("")
+	events := []emo.Event{
+		z.S().In("S().In"),
+		z.S().Inf("S().Inf"),
+		emo.DefaultZone.S().In("DZ.S().In"),
+		emo.DefaultZone.S().Inf("DZ.S().Inf"),
 
-	if w.File != evt.File {
-		t.Errorf("want call stack file equality, but got S.Warning=%v S.Info=%v", w.File, evt.File)
-	}
-	if w.File != x.File {
-		t.Errorf("want call stack file equality, but got S.Warning=%v S.Warn=%v", w.File, x.File)
-	}
-	if w.File != y.File {
-		t.Errorf("want call stack file equality, but got S.Warning=%v Warn=%v", w.File, y.File)
-	}
-	if w.File != f.File {
-		t.Errorf("want call stack file equality, but got S.Warning=%v Warnf=%v", w.File, f.File)
-	}
-	if w.File != d.File {
-		t.Errorf("want call stack file equality, but got S.Warning=%v DefaultZone.Warn=%v", w.File, d.File)
-	}
-	if w.File != e.File {
-		t.Errorf("want call stack file equality, but got S.Warning=%v Errorf=%v", w.File, e.File)
-	}
-	if w.File != p.File {
-		t.Errorf("want call stack file equality, but got S.Warning=%v S.Print=%v", w.File, p.File)
-	}
-	if w.File != g.File {
-		t.Errorf("want call stack file equality, but got S.Warning=%v S.Printf=%v", w.File, g.File)
-	}
-	if w.File != q.File {
-		t.Errorf("want call stack file equality, but got S.Warning=%v DefaultZone.S.Print=%v", w.File, q.File)
+		z.S().In("S().In"),
+		z.S().Inf("S().Inf"),
+		emo.DefaultZone.S().In("DZ.S().In"),
+		emo.DefaultZone.S().Inf("DZ.S().Inf"),
+
+		z.S().Print("S().Print"),
+		z.S().Printf("S().Printf"),
+		emo.DefaultZone.S().Print("DZ.S().Print"),
+		emo.DefaultZone.S().Printf("DZ.S().Printf"),
+
+		z.S().Print("S().Print"),
+		z.S().Printf("S().Printf"),
+		emo.DefaultZone.S().Print("DZ.S().Print"),
+		emo.DefaultZone.S().Printf("DZ.S().Printf"),
+
+		z.S().Warning("S().Warning"),
+		z.S().Warningf("S().Warningf"),
+		emo.DefaultZone.S().Warning("DZ.S().Warning"),
+		emo.DefaultZone.S().Warningf("DZ.S().Warningf"),
+
+		z.S().Warn("S().Warn"),
+		z.S().Warnf("S().Warnf"),
+		emo.DefaultZone.S().Warn("DZ.S().Warn"),
+		emo.DefaultZone.S().Warnf("DZ.S().Warnf"),
+
+		z.Warn("Warn"),
+		z.Warnf("Warnf"),
+		emo.DefaultZone.Warn("DZ.Warn"),
+		emo.DefaultZone.Warnf("DZ.Warnf"),
+
+		z.S().Error("S().Error"),
+		z.S().Errorf("S().Errorf"),
+		emo.DefaultZone.S().Error("DZ.S().Error"),
+		emo.DefaultZone.S().Errorf("DZ.S().Errorf"),
+
+		z.S(0).Error("S(0).Error"),
+		z.S(0).Errorf("S(0).Errorf"),
+		emo.DefaultZone.S(0).Error("DZ.S(0).Error"),
+		emo.DefaultZone.S(0).Errorf("DZ.S(0).Errorf"),
+
+		emo.DefaultZone.Error("DZ.Error"),
+		emo.DefaultZone.Errorf("DZ.Errorf"),
 	}
 
-	if w.Line == evt.Line {
-		t.Errorf("want call stack line difference, but got S.Warning=%v == S.Info=%v", w.Line, evt.Line)
-	}
-	if w.Line != x.Line {
-		t.Errorf("want call stack line equality, but got S.Warning=%v S.Warn=%v", w.Line, x.Line)
-	}
-	if w.Line != y.Line {
-		t.Errorf("want call stack line equality, but got S.Warning=%v Warn=%v", w.Line, y.Line)
-	}
-	if w.Line != f.Line {
-		t.Errorf("want call stack line equality, but got S.Warning=%v Warnf=%v", w.Line, f.Line)
-	}
-	if w.Line != d.Line {
-		t.Errorf("want call stack line equality, but got S.Warning=%v DefaultZone.Warn=%v", w.Line, d.Line)
-	}
-	if w.Line != e.Line {
-		t.Errorf("want call stack line equality, but got S.Warning=%v Errorf=%v", w.Line, e.Line)
-	}
-	if w.Line != p.Line {
-		t.Errorf("want call stack line equality, but got S.Warning=%v S.Print=%v", w.Line, p.Line)
-	}
-	if w.Line != g.Line {
-		t.Errorf("want call stack line equality, but got S.Warning=%v S.Printf=%v", w.Line, g.Line)
-	}
-	if w.Line != q.Line {
-		t.Errorf("want call stack line equality, but got S.Warning=%v DefaultZone.S.Print=%v", w.Line, p.Line)
+	for i := range events {
+		if events[i].File != evt.File {
+			t.Errorf("[call stack info] Want same file, but got %s=%q S.Info=%q", events[i].Args[0], events[i].File, evt.File)
+		} else {
+			d := events[i].Line - evt.Line
+			if d < 0 || d > 100 {
+				t.Errorf("[call stack info] Want similar line #, but got got %s=%d S.Info=%d", events[i].Args[0], events[i].Line, evt.Line)
+			}
+		}
 	}
 }
