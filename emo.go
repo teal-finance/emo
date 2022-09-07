@@ -343,9 +343,9 @@ func (zone Zone) stackInfoEnabled(isError bool) bool {
 		return true
 	}
 	if DefaultZone.StackInfo <= No {
-		return isError && zone.toBePrinted(isError)
+		return false
 	}
-	return false
+	return isError && zone.toBePrinted(isError)
 }
 
 // --- following functions for compatibility with logrus and Go standard logger ---
@@ -440,14 +440,14 @@ func Fatalf(format string, v ...any) {
 }
 
 func (zone Zone) Fatal(args ...any) {
-	m := zone.S(1).NewEvent("🤯", true, args...).Message()
-	log.Fatal(m)
+	msg := zone.S().NewEvent("🤯", true, args...).Message()
+	log.Fatal(msg)
 }
 
 func (zone Zone) Fatalf(format string, v ...any) {
 	s := fmt.Sprintf(format, v...)
-	m := zone.S(1).NewEvent("🤯", true, s).Message()
-	log.Fatal(m)
+	msg := zone.S().NewEvent("🤯", true, s).Message()
+	log.Fatal(msg)
 }
 
 func Panic(args ...any) {
@@ -459,14 +459,14 @@ func Panicf(format string, v ...any) {
 }
 
 func (zone Zone) Panic(args ...any) {
-	m := zone.S(1).NewEvent("😵", true, args...).Message()
-	log.Panic(m)
+	msg := zone.S().NewEvent("😵", true, args...).Message()
+	log.Panic(msg)
 }
 
 func (zone Zone) Panicf(format string, v ...any) {
 	s := fmt.Sprintf(format, v...)
-	m := zone.S(1).NewEvent("😵", true, s).Message()
-	log.Panic(m)
+	msg := zone.S().NewEvent("😵", true, s).Message()
+	log.Panic(msg)
 }
 
 // --- following functions colorize output depending on configuration ---
