@@ -46,11 +46,11 @@ up:
 
 .PHONY: test
 test:
-	go test -race -vet all -tags=emo -coverprofile=code-coverage-of-tests.out ./...
+	go test -race -vet all -tags=emo -coverprofile=code-coverage.out ./...
 
 .PHONY:
 cov: test
-	go tool cover -html code-coverage-of-tests.out
+	go tool cover -html code-coverage.out
 
 .PHONY: vet
 vet: up test
