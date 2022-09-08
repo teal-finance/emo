@@ -1,5 +1,5 @@
 help:
-	# make all    Upgrade deps, Generate all, Format code, Test Go code, Lint Go code
+	# make all    Do the following commands (upgrade, generate, format, Go test/lint)
 	#
 	# make go     Generate code for the Go library
 	# make ts     Generate code for the Typescript library
@@ -7,10 +7,11 @@ help:
 	# make dart   Generate code for the Dart library
 	# make doc    Generate the documentation
 	#
-	# make up     Go: Upgrade deps
+	# make up     Go: Upgrade the patch version of the dependencies
+	# make up+    Go: Upgrade the minor version of the dependencies
 	# make fmt    Go: Generate code and Format code
 	# make test   Go: Check build and Test
-	# make cov    Go: Test and Visualize the code coverage
+	# make cov    Go: Visualize the code coverage
 	# make vet    Go: Run example and Lint
 
 .PHONY: all
@@ -36,14 +37,21 @@ dart:
 doc:
 	go run codegen/main.go -doc
 
-.PHONY: up
-up:
+go.sum: go.mod
 	go mod tidy
+
+.PHONY: up
+up: go.sum
+	GOPROXY=direct go get -t -u=patch all
+	go mod tidy
+
+.PHONY: up+
+up+: go.sum
 	go get -u -t all
+	go mod tidy
 
 .PHONY: fmt
 fmt:
-	go mod tidy
 	go generate ./...
 	go run mvdan.cc/gofumpt@latest -w -extra -l -lang 1.19 .
 
@@ -52,8 +60,11 @@ test:
 	go build ./...
 	go test -race -vet all -tags=emo -coverprofile=code-coverage.out ./...
 
+code-coverage.out: go.sum */*.go
+	go test -race -vet all -tags=emo -coverprofile=code-coverage.out ./...
+
 .PHONY: cov
-cov: test
+cov: code-coverage.out
 	go tool cover -html code-coverage.out
 
 .PHONY: vet
