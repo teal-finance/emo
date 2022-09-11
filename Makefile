@@ -1,5 +1,5 @@
 help:
-	# make all    Do the following commands (upgrade, generate, format, Go test/lint)
+	# make all    Upgrade, Generate, Format, Go test/lint
 	#
 	# make go     Generate code for the Go library
 	# make ts     Generate code for the Typescript library
@@ -11,7 +11,7 @@ help:
 	# make up+    Go: Upgrade the minor version of the dependencies
 	# make fmt    Go: Generate code and Format code
 	# make test   Go: Check build and Test
-	# make cov    Go: Visualize the code coverage
+	# make cov    Go: Browse test coverage
 	# make vet    Go: Run example and Lint
 
 .PHONY: all
