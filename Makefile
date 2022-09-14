@@ -69,5 +69,5 @@ cov: code-coverage.out
 
 .PHONY: vet
 vet:
-	go run ./examples/go
-	go run github.com/golangci/golangci-lint/cmd/golangci-lint@latest run --fix
+	go run -race ./examples/go
+	go run -race github.com/golangci/golangci-lint/cmd/golangci-lint@latest run --fix
