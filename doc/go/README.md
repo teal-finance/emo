@@ -282,3 +282,22 @@ Thus a specific function controls its enabling:
 ```go
 emo.GlobalTracing(true)
 ```
+
+## TODO
+
+1. Support structured logging similar to [zap](https://github.com/uber-go/zap#quick-start):
+
+    ```go
+    log.Infow("failed to fetch URL",
+      "url", url,
+      "attempt", 3,
+      "backoff", time.Second,
+    )
+    ```
+
+2. Improve performance by being inspired by [logf](https://github.com/zerodha/logf):
+
+    BenchmarkOneField_WithColor       205.7 ns/op    0 allocs/op
+    BenchmarkThreeFields_WithColor    379.4 ns/op    0 allocs/op
+    BenchmarkErrorField_WithColor     353.6 ns/op    0 allocs/op
+    BenchmarkHugePayload_WithColor    799.5 ns/op    0 allocs/op
