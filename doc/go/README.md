@@ -297,7 +297,7 @@ emo.GlobalTracing(true)
 
 2. Improve performance by being inspired by [logf](https://github.com/zerodha/logf):
 
-    BenchmarkOneField_WithColor       205.7 ns/op    0 allocs/op
-    BenchmarkThreeFields_WithColor    379.4 ns/op    0 allocs/op
-    BenchmarkErrorField_WithColor     353.6 ns/op    0 allocs/op
-    BenchmarkHugePayload_WithColor    799.5 ns/op    0 allocs/op
+       BenchmarkOneField_WithColor       205.7 ns/op    0 allocs/op
+       BenchmarkThreeFields_WithColor    379.4 ns/op    0 allocs/op
+       BenchmarkErrorField_WithColor     353.6 ns/op    0 allocs/op
+       BenchmarkHugePayload_WithColor    799.5 ns/op    0 allocs/op
