@@ -125,7 +125,7 @@ func (zone Zone) V(auto ...bool) Zone {
 // Without arguments, S forces the retrieval
 // of the call stack info (i.e. caller function and file:line).
 //
-// The position within the call stack can be shifted with the optional parameter:
+// The call stack depth can be shifted with the optional parameter:
 //
 //	func myLoggerFunction(s string) { zone.S(2).Error(s) }
 //
@@ -136,25 +136,25 @@ func (zone Zone) V(auto ...bool) Zone {
 // The zero value is to use the global settings:
 //
 //	zone.S(0).Error("msg")
-func (zone Zone) S(position ...int) Zone {
-	// if StackInfo already shifts the call stack position
+func (zone Zone) S(callDepth ...int) Zone {
+	// if StackInfo already shifts the call stack depth
 	if zone.StackInfo > Yes {
-		if len(position) > 0 {
-			if position[0] < 0 {
+		if len(callDepth) > 0 {
+			if callDepth[0] < 0 {
 				zone.StackInfo = No
-			} else if position[0] > 0 {
-				// increment the call stack position
-				zone.StackInfo += ParamType(position[0])
+			} else if callDepth[0] > 0 {
+				// increment the call stack depth
+				zone.StackInfo += ParamType(callDepth[0])
 			}
-			// position[0]==0 is ignored because it may break the call stack position
+			// callDepth[0]==0 is ignored because it may use a bad call stack depth
 		}
 	} else {
 		zone.StackInfo = Yes
-		if len(position) > 0 {
-			if position[0] >= 1 {
-				position[0]++ // shift the call stack position one step more
+		if len(callDepth) > 0 {
+			if callDepth[0] >= 1 {
+				callDepth[0]++ // shift the call stack depth one step more
 			}
-			zone.StackInfo = ParamType(position[0])
+			zone.StackInfo = ParamType(callDepth[0])
 		}
 	}
 	return zone
@@ -284,19 +284,19 @@ func (e Event) CallHook() Event {
 // Stack extracts info from the the call stack info
 // (caller function, file and line number).
 // Then the event may be printed later.
-// The optional parameter allows to change the position within the call stack.
+// The optional parameter allows to change the call stack depth within the call stack.
 func (e Event) Stack(optionalPosition ...int) Event {
 	// do not extract the call stack info if already done
 	if e.From == "" {
-		position := 4
+		callDepth := 4
 		if e.Zone.StackInfo > Yes {
-			position = 3 + int(e.Zone.StackInfo)
+			callDepth = 3 + int(e.Zone.StackInfo)
 		}
 		if len(optionalPosition) > 0 {
-			position += optionalPosition[0]
+			callDepth += optionalPosition[0]
 		}
 		pc := make([]uintptr, 1)
-		runtime.Callers(position, pc)
+		runtime.Callers(callDepth, pc)
 		f := runtime.FuncForPC(pc[0])
 		e.File, e.Line = f.FileLine(pc[0])
 		e.From = f.Name()
