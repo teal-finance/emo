@@ -3,6 +3,7 @@ package emo
 import (
 	"fmt"
 	"log"
+	"os"
 	"runtime"
 	"strconv"
 	"strings"
@@ -441,13 +442,17 @@ func Fatalf(format string, v ...any) {
 
 func (zone Zone) Fatal(args ...any) {
 	msg := zone.S().NewEvent("🤯", true, args...).Message()
-	log.Fatal(msg)
+	if timestampPrefixed {
+		log.Fatal(msg)
+	} else {
+		fmt.Println(msg)
+		os.Exit(1)
+	}
 }
 
 func (zone Zone) Fatalf(format string, v ...any) {
 	s := fmt.Sprintf(format, v...)
-	msg := zone.S().NewEvent("🤯", true, s).Message()
-	log.Fatal(msg)
+	zone.S(1).Fatal(s)
 }
 
 func Panic(args ...any) {
@@ -460,13 +465,16 @@ func Panicf(format string, v ...any) {
 
 func (zone Zone) Panic(args ...any) {
 	msg := zone.S().NewEvent("😵", true, args...).Message()
-	log.Panic(msg)
+	if timestampPrefixed {
+		log.Panic(msg)
+	} else {
+		panic(msg)
+	}
 }
 
 func (zone Zone) Panicf(format string, v ...any) {
 	s := fmt.Sprintf(format, v...)
-	msg := zone.S().NewEvent("😵", true, s).Message()
-	log.Panic(msg)
+	zone.S(1).Panic(s)
 }
 
 // --- following functions colorize output depending on configuration ---
