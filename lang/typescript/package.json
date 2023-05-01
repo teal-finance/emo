@@ -1,14 +1,9 @@
 {
   "name": "emosd",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Emoji based semantic debuging",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "files": [
-    "/lib"
-  ],
   "scripts": {
-    "build": "tsc",
+    "build": "rm -f dist/* && rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,9 +17,24 @@
   "devDependencies": {
     "@types/node": "^14.14.28",
     "tslib": "^2.1.0",
-    "typescript": "^4.1.3"
+    "typescript": "^4.1.3",
+    "@rollup/plugin-commonjs": "^21.0.2",
+    "@rollup/plugin-node-resolve": "^13.1.3",
+    "@rollup/plugin-typescript": "^8.3.1",
+    "rollup-plugin-terser": "^7.0.2"
   },
-  "prepublish": "tsc",
+  "main": "./dist/emo.min.cjs",
+  "module": "./dist/emo.mjs",
+  "types": "./dist/main.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/emo.mjs",
+      "require": "./dist/emo.min.cjs"
+    }
+  },
+  "files": [
+    "/dist"
+  ],
   "author": "synw",
   "license": "MIT"
 }
