@@ -21,7 +21,7 @@ yarn add emosd
 ## Example
 
    ```javascript
-import { Emo } from "./emosd";
+import { Emo } from "emosd";
 
 const emo = new Emo();
 const zone2 = new Emo({ zone: "zone2" });
