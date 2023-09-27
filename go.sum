@@ -1,4 +1,4 @@
 github.com/acmacalister/skittles v0.0.0-20160609003031-7423546701e1 h1:RKnVV4C7qoN/sToLX2y1dqH7T6kKLMHcwRJlgwb9Ggk=
 github.com/acmacalister/skittles v0.0.0-20160609003031-7423546701e1/go.mod h1:gI5CyA/CEnS6eqNV22rqs4dG3aGfaSbXgPORIlwr2r0=
-github.com/dolmen-go/codegen v1.0.0 h1:B/U0E1Cf5KekYF7Cx+M+CVi+Kk5juyGetb5QcXWZSgw=
-github.com/dolmen-go/codegen v1.0.0/go.mod h1:hw2TU7hTAA0vaJ1Cow+oSW9ClG+4uBGn6zPXIXsYW5c=
+github.com/dolmen-go/codegen v1.0.1 h1:8K6EwoI+QzQA/szQ2r4shM7jXGG9XVwLC//0YjkqCaQ=
+github.com/dolmen-go/codegen v1.0.1/go.mod h1:CizO325GSq98j3+f6husBwOjkt8zD2WxBEDmk7SuiA8=
